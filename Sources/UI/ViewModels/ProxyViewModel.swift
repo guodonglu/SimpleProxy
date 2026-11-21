@@ -99,9 +99,6 @@ public final class ProxyViewModel: ObservableObject, ProxyServerDelegate {
 
         // Start Proxy Server automatically
         startProxy()
-
-        // Start Memory Monitor Timer
-        startMemoryMonitoring()
     }
 
     // MARK: - Server Control

@@ -19,14 +19,14 @@
 ![Visual Mode (Dark)](Documentation/screenshots/01_visual_mode_initial.png)
 
 ### 2. 浅色模式原生适配 (Light Mode)
-支持跟随系统自动切换或手动一键切换，完美适配浅色 Liquid Glass 毛玻璃质感与 SF 字体：
+支持跟随系统自动切换或手动一键切换，完美适配浅色 Liquid Glass 毛玻璃质感与 SF 字体，界面通透晶莹，纯净去繁：
 
-![Visual Mode (Light)](Documentation/screenshots/14_appearance_light.png)
+![Visual Mode (Light)](Documentation/screenshots/16_light_mode_optimized.png)
 
 ### 3. 文本配置模式 (Configuration Mode)
 兼容标准 Whistle 规则语法的纯文本编辑器，支持单色字体、快捷语法模板插入与实时生效状态校验：
 
-![Config Mode (Light)](Documentation/screenshots/15_appearance_light_config.png)
+![Config Mode (Light)](Documentation/screenshots/17_light_mode_config_optimized.png)
 
 ### 4. 原生规则编辑弹窗
 点击「新增规则」或按快捷键 `⌘N` 唤出原生 macOS 毛玻璃表单弹窗：

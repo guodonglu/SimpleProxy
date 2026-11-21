@@ -2,6 +2,7 @@ import SwiftUI
 
 public struct VisualModeView: View {
     @ObservedObject var viewModel: ProxyViewModel
+    @Environment(\.colorScheme) var colorScheme
 
     public var body: some View {
         VStack(spacing: 0) {
@@ -16,13 +17,17 @@ public struct VisualModeView: View {
                             }
                         } label: {
                             Text(filter.rawValue)
-                                .font(.system(size: 11, weight: viewModel.filterType == filter ? .semibold : .regular))
+                                .font(.system(size: 11, weight: viewModel.filterType == filter ? .semibold : .medium))
                                 .foregroundColor(viewModel.filterType == filter ? WhistTheme.accent : WhistTheme.labelSecondary)
                                 .padding(.horizontal, 10)
-                                .padding(.vertical, 4)
+                                .padding(.vertical, 4.5)
                                 .background(
                                     Capsule(style: .continuous)
-                                        .fill(viewModel.filterType == filter ? WhistTheme.accentSubtle : WhistTheme.pillBackground)
+                                        .fill(
+                                            viewModel.filterType == filter
+                                                ? WhistTheme.accentSubtle
+                                                : (colorScheme == .light ? Color.black.opacity(0.04) : Color.white.opacity(0.06))
+                                        )
                                 )
                         }
                         .buttonStyle(.plain)
@@ -40,7 +45,7 @@ public struct VisualModeView: View {
                     TextField("搜索域名、路径或目标...", text: $viewModel.searchText)
                         .textFieldStyle(.plain)
                         .font(.system(size: 11))
-                        .frame(width: 180)
+                        .frame(width: 190)
                     if !viewModel.searchText.isEmpty {
                         Button {
                             viewModel.searchText = ""
@@ -54,21 +59,21 @@ public struct VisualModeView: View {
                     }
                 }
                 .padding(.horizontal, 8)
-                .padding(.vertical, 4)
+                .padding(.vertical, 4.5)
                 .background(
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .fill(WhistTheme.cardBackground)
+                    RoundedRectangle(cornerRadius: 7, style: .continuous)
+                        .fill(colorScheme == .light ? Color.white.opacity(0.90) : Color.white.opacity(0.06))
                 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .stroke(WhistTheme.cardBorder, lineWidth: 0.5)
+                    RoundedRectangle(cornerRadius: 7, style: .continuous)
+                        .stroke(colorScheme == .light ? Color.black.opacity(0.07) : Color.white.opacity(0.08), lineWidth: 0.5)
                 )
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-            .background(Color.primary.opacity(0.02))
+            .padding(.vertical, 9)
+            .background(colorScheme == .light ? Color.white.opacity(0.50) : Color.black.opacity(0.10))
 
-            Divider().opacity(0.4)
+            Divider().opacity(colorScheme == .light ? 0.25 : 0.4)
 
             // Content Area: Rules List or Empty State
             if filteredIndices.isEmpty {
@@ -137,6 +142,7 @@ public struct VisualModeView: View {
 public struct MacToggle: View {
     public var isOn: Bool
     public var onToggle: () -> Void
+    @Environment(\.colorScheme) var colorScheme
 
     public init(isOn: Bool, onToggle: @escaping () -> Void) {
         self.isOn = isOn
@@ -144,6 +150,8 @@ public struct MacToggle: View {
     }
 
     public var body: some View {
+        let offTrack = (colorScheme == .light ? Color.black.opacity(0.10) : Color.white.opacity(0.16))
+
         Button {
             withAnimation(.spring(response: 0.25, dampingFraction: 0.75)) {
                 onToggle()
@@ -151,14 +159,14 @@ public struct MacToggle: View {
         } label: {
             ZStack(alignment: isOn ? .trailing : .leading) {
                 Capsule(style: .continuous)
-                    .fill(isOn ? WhistTheme.accent : Color.primary.opacity(0.18))
+                    .fill(isOn ? WhistTheme.accent : offTrack)
                     .frame(width: 34, height: 20)
 
                 Circle()
                     .fill(Color.white)
                     .frame(width: 16, height: 16)
                     .padding(.horizontal, 2)
-                    .shadow(color: .black.opacity(0.2), radius: 1.5, x: 0, y: 1)
+                    .shadow(color: .black.opacity(0.18), radius: 1.5, x: 0, y: 1)
             }
             .frame(width: 34, height: 20)
             .contentShape(Rectangle())
@@ -171,9 +179,18 @@ public struct MacToggle: View {
 struct RuleCardRow: View {
     @Binding var rule: ProxyRule
     @ObservedObject var viewModel: ProxyViewModel
+    @Environment(\.colorScheme) var colorScheme
     @State private var isHovered: Bool = false
 
     var body: some View {
+        let isLight = (colorScheme == .light)
+        let primaryText = rule.isEnabled
+            ? (isLight ? Color(red: 0.11, green: 0.13, blue: 0.17) : Color.white)
+            : WhistTheme.labelTertiary
+        let secondaryText = rule.isEnabled
+            ? (isLight ? Color(red: 0.32, green: 0.36, blue: 0.42) : Color.white.opacity(0.70))
+            : WhistTheme.labelTertiary
+
         HStack(spacing: 14) {
             // 1. Instant Real-time Toggle Switch with Crystal Clear Visual State
             MacToggle(isOn: rule.isEnabled) {
@@ -190,15 +207,15 @@ struct RuleCardRow: View {
                 .padding(.vertical, 3)
                 .background(
                     RoundedRectangle(cornerRadius: 4, style: .continuous)
-                        .fill(rule.action.badgeColor.opacity(rule.isEnabled ? 0.9 : 0.4))
+                        .fill(rule.action.badgeColor.opacity(rule.isEnabled ? 0.95 : 0.35))
                 )
 
             // 3. Pattern / Source Domain
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 6) {
                     Text(rule.pattern)
-                        .font(.system(size: 13, weight: .medium, design: .monospaced))
-                        .foregroundColor(rule.isEnabled ? WhistTheme.labelPrimary : WhistTheme.labelTertiary)
+                        .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                        .foregroundColor(primaryText)
                         .strikethrough(!rule.isEnabled)
 
                     if let comment = rule.comment, !comment.isEmpty {
@@ -211,11 +228,11 @@ struct RuleCardRow: View {
                 // Target Action Details
                 HStack(spacing: 6) {
                     Image(systemName: "arrow.right")
-                        .font(.system(size: 9))
+                        .font(.system(size: 9, weight: .semibold))
                         .foregroundColor(WhistTheme.labelTertiary)
                     Text(rule.action.displayTarget)
                         .font(.system(size: 11, design: .monospaced))
-                        .foregroundColor(rule.isEnabled ? WhistTheme.labelSecondary : WhistTheme.labelTertiary)
+                        .foregroundColor(secondaryText)
                         .lineLimit(1)
                 }
             }
@@ -223,14 +240,14 @@ struct RuleCardRow: View {
             Spacer()
 
             // 4. Hover Action Buttons (Edit, Duplicate, Delete)
-            HStack(spacing: 6) {
+            HStack(spacing: 8) {
                 // Edit
                 Button {
                     viewModel.editingRule = rule
                     viewModel.isShowingRuleSheet = true
                 } label: {
                     Image(systemName: "pencil")
-                        .font(.system(size: 11))
+                        .font(.system(size: 11, weight: .medium))
                 }
                 .buttonStyle(.plain)
                 .foregroundColor(WhistTheme.labelSecondary)
@@ -241,7 +258,7 @@ struct RuleCardRow: View {
                     viewModel.duplicateRule(rule: rule)
                 } label: {
                     Image(systemName: "plus.square.on.square")
-                        .font(.system(size: 11))
+                        .font(.system(size: 11, weight: .medium))
                 }
                 .buttonStyle(.plain)
                 .foregroundColor(WhistTheme.labelSecondary)
@@ -252,19 +269,19 @@ struct RuleCardRow: View {
                     viewModel.deleteRule(id: rule.id)
                 } label: {
                     Image(systemName: "trash")
-                        .font(.system(size: 11))
+                        .font(.system(size: 11, weight: .medium))
                 }
                 .buttonStyle(.plain)
-                .foregroundColor(WhistTheme.errorRed.opacity(0.8))
+                .foregroundColor(WhistTheme.errorRed.opacity(0.85))
                 .help("删除此规则")
             }
-            .opacity(isHovered ? 1.0 : 0.4)
+            .opacity(isHovered ? 1.0 : 0.35)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 10)
-        .glassCard(cornerRadius: 10, isHighlighted: isHovered)
+        .glassCard(cornerRadius: WhistTheme.cardRadius, isHighlighted: isHovered)
         .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.1)) {
+            withAnimation(.easeInOut(duration: 0.12)) {
                 isHovered = hovering
             }
         }

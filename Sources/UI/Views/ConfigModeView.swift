@@ -2,13 +2,14 @@ import SwiftUI
 
 public struct ConfigModeView: View {
     @ObservedObject var viewModel: ProxyViewModel
+    @Environment(\.colorScheme) var colorScheme
     @State private var text: String = ""
 
     public var body: some View {
         VStack(spacing: 0) {
             // Helper Snippet Toolbar
             HStack(spacing: 12) {
-                Text("Whistle 语法快捷模版:")
+                Text("Whistle 快捷模版:")
                     .font(.system(size: 11, weight: .medium))
                     .foregroundColor(WhistTheme.labelSecondary)
 
@@ -54,9 +55,9 @@ public struct ConfigModeView: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
-            .background(Color.primary.opacity(0.02))
+            .background(colorScheme == .light ? Color.white.opacity(0.50) : Color.black.opacity(0.10))
 
-            Divider().opacity(0.4)
+            Divider().opacity(colorScheme == .light ? 0.25 : 0.4)
 
             // Monospaced Code Text Editor
             TextEditor(text: Binding(
@@ -69,7 +70,7 @@ public struct ConfigModeView: View {
             .lineSpacing(4)
             .padding(14)
             .scrollContentBackground(.hidden)
-            .background(WhistTheme.cardBackground)
+            .background(colorScheme == .light ? Color.white.opacity(0.85) : Color.black.opacity(0.30))
         }
     }
 

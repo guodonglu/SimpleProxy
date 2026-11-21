@@ -2,21 +2,22 @@ import SwiftUI
 
 public struct HeaderBarView: View {
     @ObservedObject var viewModel: ProxyViewModel
+    @Environment(\.colorScheme) var colorScheme
 
     public var body: some View {
         HStack(spacing: 16) {
             // Left: Traffic Light safety margin + Branding
             HStack(spacing: 10) {
                 Image(systemName: "waveform.path.ecg")
-                    .font(.system(size: 15, weight: .bold))
+                    .font(.system(size: 14, weight: .bold))
                     .foregroundStyle(WhistTheme.accent)
                     .frame(width: 28, height: 28)
                     .background(WhistTheme.accentSubtle, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
 
-                VStack(alignment: .leading, spacing: 1) {
+                VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 6) {
                         Text("WhistFlow")
-                            .font(.system(size: 14, weight: .semibold))
+                            .font(.system(size: 13, weight: .bold))
                             .foregroundColor(WhistTheme.labelPrimary)
 
                         // Running status badge
@@ -24,27 +25,34 @@ public struct HeaderBarView: View {
                             Circle()
                                 .fill(viewModel.isServerRunning ? WhistTheme.activeGreen : WhistTheme.labelTertiary)
                                 .frame(width: 6, height: 6)
-                            Text(viewModel.isServerRunning ? ":\(String(viewModel.serverPort))" : "已停止")
-                                .font(.system(size: 10, weight: .medium, design: .monospaced))
+                            Text(viewModel.isServerRunning ? "端口 \(String(viewModel.serverPort))" : "已停止")
+                                .font(.system(size: 10, weight: .semibold, design: .monospaced))
                                 .foregroundColor(viewModel.isServerRunning ? WhistTheme.activeGreen : WhistTheme.labelTertiary)
+                                .lineLimit(1)
+                                .fixedSize()
                         }
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 2.5)
                         .background(
                             Capsule(style: .continuous)
-                                .fill(viewModel.isServerRunning ? WhistTheme.activeGreen.opacity(0.12) : Color.primary.opacity(0.05))
+                                .fill(viewModel.isServerRunning ? WhistTheme.activeGreen.opacity(0.12) : Color.primary.opacity(0.06))
                         )
                     }
 
-                    HStack(spacing: 8) {
-                        Text("\(viewModel.rules.count) 条规则")
-                        Text("•")
-                        Text("内存 \(String(format: "%.1f", viewModel.memoryUsageMB)) MB")
-                        Text("•")
-                        Text("\(viewModel.matchedRequests) 命中")
+                    HStack(spacing: 6) {
+                        Text("\(viewModel.rules.count) 条代理规则")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundColor(WhistTheme.labelSecondary)
+
+                        if viewModel.matchedRequests > 0 {
+                            Text("•")
+                                .font(.system(size: 10))
+                                .foregroundColor(WhistTheme.labelTertiary)
+                            Text("\(viewModel.matchedRequests) 次命中")
+                                .font(.system(size: 10, weight: .medium))
+                                .foregroundColor(WhistTheme.labelSecondary)
+                        }
                     }
-                    .font(.system(size: 10))
-                    .foregroundColor(WhistTheme.labelSecondary)
                 }
             }
             .padding(.leading, WhistTheme.trafficLightsMargin)
@@ -58,7 +66,7 @@ public struct HeaderBarView: View {
                 }
             }
             .pickerStyle(.segmented)
-            .frame(width: 230)
+            .frame(width: 220)
 
             Spacer()
 
@@ -85,7 +93,7 @@ public struct HeaderBarView: View {
                         .font(.system(size: 12))
                 }
                 .buttonStyle(.bordered)
-                .help("导入 Whistle 规则 (⌘O)")
+                .help("导入规则文件 (⌘O)")
                 .keyboardShortcut("o", modifiers: .command)
 
                 // Export
@@ -116,7 +124,7 @@ public struct HeaderBarView: View {
                     viewModel.toggleProxy()
                 } label: {
                     Image(systemName: viewModel.isServerRunning ? "power.circle.fill" : "power.circle")
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.system(size: 15, weight: .semibold))
                         .foregroundColor(viewModel.isServerRunning ? WhistTheme.activeGreen : WhistTheme.labelTertiary)
                 }
                 .buttonStyle(.plain)
@@ -126,9 +134,13 @@ public struct HeaderBarView: View {
             .padding(.trailing, 16)
         }
         .frame(height: 52)
-        .background(.ultraThinMaterial)
+        .background(
+            colorScheme == .light
+                ? Color.white.opacity(0.85)
+                : Color.black.opacity(0.20)
+        )
         .overlay(
-            Divider().opacity(0.5),
+            Divider().opacity(colorScheme == .light ? 0.25 : 0.4),
             alignment: .bottom
         )
     }

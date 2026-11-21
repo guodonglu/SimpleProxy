@@ -60,10 +60,15 @@ This document is maintained continuously across turns to preserve context, archi
   - [x] Built-in Local REST Control API on `127.0.0.1:9898/_whistflow/api/` for dynamic control.
   - [x] `whistflow` CLI executable script installed to `~/.local/bin/whistflow`.
   - [x] Official companion skill authored at `~/.agents/skill/whistflow/SKILL.md`.
+- [x] **Milestone 7: UI/UX Pro Max Skill Installation & UI/UX De-cluttering Polish**
+  - [x] Installed `ui-ux-pro-max` skill from `nextlevelbuilder/ui-ux-pro-max-skill` to `~/.agents/skill/ui-ux-pro-max/`.
+  - [x] Eliminated redundant debug stats (removed "内存占用" from header bar and stopped background memory timer).
+  - [x] Revamped Light Mode palette & materials: eliminated muddy gray tones, applied luminous clean white frosted glass cards and silky background gradient.
+  - [x] Verified and captured screenshots `16_light_mode_optimized.png`, `17_light_mode_config_optimized.png`, and `18_dark_mode_optimized.png`.
 
 ## 4. Current State
 - All milestones fully delivered and verified.
-- Production app: `WhistFlow.app` (1.2 MB, ~9.4 MB RAM).
+- Production app: `WhistFlow.app` (1.2 MB).
 - CLI tool: `whistflow` in `~/.local/bin/whistflow`.
-- Agent Skill: `~/.agents/skill/whistflow/SKILL.md`.
+- Agent Skills: `ui-ux-pro-max` and `whistflow` in `~/.agents/skill/`.
 - GitHub repository: `https://github.com/guodonglu/WhistFlow`.

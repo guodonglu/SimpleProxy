@@ -2,12 +2,33 @@ import SwiftUI
 
 public struct MainView: View {
     @StateObject private var viewModel = ProxyViewModel()
+    @Environment(\.colorScheme) var systemColorScheme
+
+    private var isLight: Bool {
+        if let mode = viewModel.appearanceMode.colorScheme {
+            return mode == .light
+        }
+        return systemColorScheme == .light
+    }
 
     public var body: some View {
         ZStack {
             // macOS 26 Liquid Glass Vibrancy Background
-            VisualEffectBackground(material: .sidebar, blendingMode: .behindWindow)
+            VisualEffectBackground(material: .windowBackground, blendingMode: .behindWindow)
                 .ignoresSafeArea()
+
+            // Luminous Frosted Tint for Light Mode (eliminates muddy gray tones)
+            if isLight {
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.98, green: 0.985, blue: 0.995).opacity(0.92),
+                        Color(red: 0.95, green: 0.96, blue: 0.975).opacity(0.96)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
+            }
 
             VStack(spacing: 0) {
                 // Header Bar (Title, Stats, Mode Switcher, Actions)
