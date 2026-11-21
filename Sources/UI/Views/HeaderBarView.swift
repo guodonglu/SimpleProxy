@@ -60,12 +60,13 @@ public struct HeaderBarView: View {
             Spacer()
 
             // Center: Dual Mode Switcher Segmented Control
-            Picker("视图模式", selection: $viewModel.currentMode) {
+            Picker("", selection: $viewModel.currentMode) {
                 ForEach(AppMode.allCases) { mode in
                     Label(mode.rawValue, systemImage: mode.icon).tag(mode)
                 }
             }
             .pickerStyle(.segmented)
+            .labelsHidden()
             .frame(width: 220)
 
             Spacer()

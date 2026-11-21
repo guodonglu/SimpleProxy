@@ -16,17 +16,17 @@
 ### 1. 可视化模式 (Visual Mode)
 以优雅的 macOS 原生 Liquid Glass 流体卡片直观呈现代理规则，具备实时开关、类型徽章、分类过滤与快捷操作：
 
-![Visual Mode (Dark)](Documentation/screenshots/01_visual_mode_initial.png)
+![Visual Mode (Dark)](Documentation/screenshots/21_dark_mode_no_picker_label.png)
 
 ### 2. 浅色模式原生适配 (Light Mode)
 支持跟随系统自动切换或手动一键切换，完美适配浅色 Liquid Glass 毛玻璃质感与 SF 字体，界面通透晶莹，纯净去繁：
 
-![Visual Mode (Light)](Documentation/screenshots/16_light_mode_optimized.png)
+![Visual Mode (Light)](Documentation/screenshots/19_light_mode_no_picker_label.png)
 
 ### 3. 文本配置模式 (Configuration Mode)
 兼容标准 Whistle 规则语法的纯文本编辑器，支持单色字体、快捷语法模板插入与实时生效状态校验：
 
-![Config Mode (Light)](Documentation/screenshots/17_light_mode_config_optimized.png)
+![Config Mode (Light)](Documentation/screenshots/20_light_mode_config_no_picker_label.png)
 
 ### 4. 原生规则编辑弹窗
 点击「新增规则」或按快捷键 `⌘N` 唤出原生 macOS 毛玻璃表单弹窗：

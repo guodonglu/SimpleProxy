@@ -126,11 +126,11 @@
 ### 1. 浅色模式适配与视觉纯净化验证
 * **测试内容**：切换浅色模式，验证去除冗余内存展示、消减暗沉灰色、提升卡片通透度与文本对比度。
 * **截图证据**：
-  * 可视化模式浅色外观（优化后）：`Documentation/screenshots/16_light_mode_optimized.png`
-  * 纯文本配置模式浅色外观（优化后）：`Documentation/screenshots/17_light_mode_config_optimized.png`
-  * 深色模式（优化后对比）：`Documentation/screenshots/18_dark_mode_optimized.png`
+  * 可视化模式浅色外观（移除视图模式文字、纯净高亮）：`Documentation/screenshots/19_light_mode_no_picker_label.png`
+  * 纯文本配置模式浅色外观：`Documentation/screenshots/20_light_mode_config_no_picker_label.png`
+  * 深色模式（优化后对比）：`Documentation/screenshots/21_dark_mode_no_picker_label.png`
 * **结论**：
-  1. 彻底移除无意义的“内存占用”诊断信息，顶栏只保留核心“端口状态”与“规则总数”，视觉极为干净专注；
+  1. 彻底移除无意义的“内存占用”诊断信息与冗余的“视图模式”文字标签，分段选择器与顶栏居中对称，视觉极为干净专注；
   2. 浅色模式底色注入纯净白霜流体渐变，卡片采用高亮半透明纯白光泽材质搭配细致描边，彻底解决旧版“灰蒙、暗沉”问题。
 
 ### 2. 本地管理 API (Local REST Control API) 实测

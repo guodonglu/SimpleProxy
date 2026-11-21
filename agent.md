@@ -64,7 +64,8 @@ This document is maintained continuously across turns to preserve context, archi
   - [x] Installed `ui-ux-pro-max` skill from `nextlevelbuilder/ui-ux-pro-max-skill` to `~/.agents/skill/ui-ux-pro-max/`.
   - [x] Eliminated redundant debug stats (removed "内存占用" from header bar and stopped background memory timer).
   - [x] Revamped Light Mode palette & materials: eliminated muddy gray tones, applied luminous clean white frosted glass cards and silky background gradient.
-  - [x] Verified and captured screenshots `16_light_mode_optimized.png`, `17_light_mode_config_optimized.png`, and `18_dark_mode_optimized.png`.
+  - [x] Removed redundant "视图模式" picker label for clean, centered segmented control.
+  - [x] Verified and captured screenshots `19_light_mode_no_picker_label.png`, `20_light_mode_config_no_picker_label.png`, and `21_dark_mode_no_picker_label.png`.
 
 ## 4. Current State
 - All milestones fully delivered and verified.
