@@ -176,6 +176,19 @@
   * 配置代码模式（纯净顶栏）：`Documentation/screenshots/27_clean_header_config_mode.png`
   * 原型图标资产：`Documentation/assets/AppIcon.png` 与 `Documentation/assets/AppIcon.icns`
 
+### 6. 专业级原生 Cocoa 代码编辑器重构 (支持 ⌘Z 撤回与 ⌘/ 快捷键注释)
+* **重构背景**：原 SwiftUI `TextEditor` 存在撤销栈断裂、无法快捷键注释、按 Tab 键丢失焦点等问题。
+* **重构内容**：
+  * 构建全新 `CodeEditorView`（基于 AppKit `NSTextView` 与 `NSScrollView`）；
+  * **撤销/重做全面生效**：打通 macOS 原生 `UndoManager`，支持 `⌘Z` 撤回与 `⇧⌘Z` 重做，打字、删减、语法插入均可自由撤回；
+  * **一键快捷键注释（`⌘/`）**：支持单行光标或大段多行选区一键在行首添加/去除 `# ` 注释，操作自动成组纳入撤销历史；
+  * **Tab 键缩进体验优化**：按 `Tab` 键直接插入 2 空格或对多行进行批量缩进，按 `Shift+Tab` 批量反缩进，彻底杜绝焦点跳出；
+  * **快捷复制行（`⌘D`）**：按下 `⌘D` 原地复制当前光标行或选区；
+  * **语法高亮增强**：支持 Whistle 注释（绿色 `#`）、协议前缀（蓝色 `resBody://`、`statusCode://`）与 URL 高亮显示。
+* **实测截图凭证**：
+  * 浅色代码模式：`Documentation/screenshots/34_fixed_code_editor.png`
+  * 深色代码模式：`Documentation/screenshots/35_code_editor_dark_mode.png`
+
 ---
 
 ## 五、 验收总结

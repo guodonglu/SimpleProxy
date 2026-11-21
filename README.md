@@ -33,9 +33,9 @@
 ![SimpleProxy Dark Mode](Documentation/screenshots/26_clean_header_dark_mode.png)
 
 ### 3. 文本配置代码模式 (Configuration Mode)
-兼容标准 Whistle 规则语法的纯文本编辑器，支持单色字体、快捷语法模板插入与实时生效状态校验：
+内置原生 Cocoa 专业级代码编辑器，支持全量撤销/重做（`⌘Z` / `⇧⌘Z`）、一键快捷键注释/反注释（`⌘/`）、Tab 缩进与 `⌘D` 行复制，兼容标准 Whistle 规则语法：
 
-![SimpleProxy Config Mode](Documentation/screenshots/27_clean_header_config_mode.png)
+![SimpleProxy Config Mode](Documentation/screenshots/34_fixed_code_editor.png)
 
 ### 4. 原生规则编辑弹窗
 点击「新增规则」或按快捷键 `⌘N` 唤出原生 macOS 毛玻璃表单弹窗：

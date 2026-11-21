@@ -35,13 +35,11 @@ public struct MainView: View {
                 HeaderBarView(viewModel: viewModel)
 
                 // Main Content Body: Visual Mode vs Config Mode
-                ZStack {
+                Group {
                     if viewModel.currentMode == .visual {
                         VisualModeView(viewModel: viewModel)
-                            .transition(.opacity)
                     } else {
                         ConfigModeView(viewModel: viewModel)
-                            .transition(.opacity)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)

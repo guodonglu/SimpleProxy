@@ -86,6 +86,15 @@ This document is maintained continuously across turns to preserve context, archi
   - [x] Removed redundant "视图模式" picker label for clean, centered segmented control.
   - [x] Verified and captured screenshots `19_light_mode_no_picker_label.png`, `20_light_mode_config_no_picker_label.png`, and `21_dark_mode_no_picker_label.png`.
 
+- [x] **Milestone 10: Professional Native Cocoa Code Editor with Full Undo/Redo & Shortcuts**
+  - [x] Replaced primitive SwiftUI `TextEditor` with high-performance `CodeEditorView` based on native `NSTextView`.
+  - [x] Full native `UndoManager` integration: `⌘Z` (撤回) and `⇧⌘Z` (重做) working seamlessly for all typing, deletions, and edits.
+  - [x] Added `⌘/` shortcut for toggling line comments (`# `) on single line or multi-line selections with undo grouping.
+  - [x] Added `Tab` / `Shift+Tab` for smooth code indentation/unindentation without losing focus.
+  - [x] Added `⌘D` for instant line duplication.
+  - [x] Implemented rich syntax highlighting for Whistle comments (`#`), protocols (`resBody://`, `statusCode://`, `redirect://`), and URLs.
+  - [x] Captured verified screenshots: `34_fixed_code_editor.png` (Light Mode) and `35_code_editor_dark_mode.png` (Dark Mode).
+
 ## 4. Current State
 - All milestones fully delivered and verified.
 - Production app: `SimpleProxy.app` (3.1 MB, native binary 1.2 MB + Retina AppIcon.icns).
