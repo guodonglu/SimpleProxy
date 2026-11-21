@@ -67,13 +67,15 @@ This document is maintained continuously across turns to preserve context, archi
   - [x] Verified with screenshots 16-21.
 - [x] **Milestone 8: Rebranding to SimpleProxy & iOS 27 Liquid Glass App Icon**
   - [x] Rebranded application across all UI, ViewModel, CLI, and bundle manifests to `SimpleProxy`.
-  - [x] Designed ultra-minimalist iOS 27 Liquid Glass app icon (Apple continuous squircle, optical glass caustics, glowing infinity proxy conduit).
-  - [x] Generated multi-resolution `AppIcon.icns` (16x16 to 1024x1024) and linked into `SimpleProxy.app/Contents/Info.plist`.
   - [x] Updated CLI to `bin/simpleproxy` and installed `simpleproxy` skill into `~/.agents/skill/simpleproxy`.
-  - [x] Verified with screenshots:
-    - `22_simpleproxy_branded_window.png` (Light Visual Mode)
-    - `23_simpleproxy_dark_mode.png` (Dark Visual Mode)
-    - `24_simpleproxy_config_mode.png` (Config Code Mode)
+- [x] **Milestone 9: Ultra-Minimalist Native Vector App Icon & Complete Header De-Cluttering**
+  - [x] Replaced AI-generated glossy 3D icon with ultra-clean, human-grade Apple CoreGraphics vector icon (continuous squircle, dark obsidian glass plate, specular rim bevel, ambient backlight, and iconic Apple proxy interchange glyph in Electric Sky Blue to Apple System Blue).
+  - [x] Rebuilt Retina `.icns` bundle (`AppIcon.icns`) and verified multi-resolution sharpness.
+  - [x] Completely removed app name ("SimpleProxy") and app icon from `HeaderBarView.swift` inside the window, retaining only the clean port badge (`● 端口 9898`) and rule count.
+  - [x] Captured verified screenshots:
+    - `25_clean_header_light_mode.png` (Light Visual Mode)
+    - `26_clean_header_dark_mode.png` (Dark Visual Mode)
+    - `27_clean_header_config_mode.png` (Config Code Mode)
   - [x] Updated documentation and pushed to GitHub.
   - [x] `whistflow` CLI executable script installed to `~/.local/bin/whistflow`.
   - [x] Official companion skill authored at `~/.agents/skill/whistflow/SKILL.md`.

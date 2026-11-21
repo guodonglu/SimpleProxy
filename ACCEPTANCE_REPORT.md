@@ -158,18 +158,23 @@
 * **Skill 路径**：`~/.agents/skill/whistflow/SKILL.md`
 * **功能**：包含完整的 YAML Frontmatter、CLI 与 REST API 驱动手册、Whistle 语法速查表、安全隔离指导，支持各类 Coding Agent 直接操作。
 
-### 5. SimpleProxy 品牌更名与 iOS 27 Liquid Glass 应用图标设计
+### 5. SimpleProxy 极简原生应用图标与窗口完全去繁化
 * **软件更名**：全项目（SwiftUI 界面、Info.plist、Package.swift、API 端点、CLI、Skill）正式更名为 **SimpleProxy**。
-* **图标设计**：采用极简 iOS 27 / macOS Liquid Glass 设计语言，包含：
-  * Apple 连续超椭圆（Continuous Squircle）剪影；
-  * 光学流体毛玻璃质感与边缘焦散折射（Caustics & Rim Light）；
-  * 纯粹优雅的流体代理无尽循环管道（Cyan & Electric Blue Loop Conduit），0 文字、纯净去繁；
+* **图标全面去 AI 质感**：摒弃复杂 3D 渲染高光，采用纯粹 Apple CoreGraphics 矢量几何级极简设计：
+  * Apple 连续超椭圆（Continuous Squircle）高阶曲线剪影；
+  * 深邃黑曜石光学流体底板与环境背光；
+  * 1px 微倒角物理高光（Specular Rim Bevel）；
+  * 经典 Apple 原生代理数据流交换符（Proxy Stream Interchange），渲染天蓝色至电光青优雅线性渐变与轻微投影，绝对纯粹无任何 AI 杂质；
   * 生成 16x16 至 1024x1024 全套 Retina `.icns` 格式，嵌入 `SimpleProxy.app` 原生 Bundle。
-* **截图凭证**：
-  * SimpleProxy 浅色模式：`Documentation/screenshots/22_simpleproxy_branded_window.png`
-  * SimpleProxy 深色模式：`Documentation/screenshots/23_simpleproxy_dark_mode.png`
-  * SimpleProxy 配置代码模式：`Documentation/screenshots/24_simpleproxy_config_mode.png`
-  * 原型图标：`Documentation/assets/AppIcon.png` 与 `Documentation/assets/AppIcon.icns`
+* **窗口内部彻底去繁**：
+  * 遵照要求，完全移除窗口内部的软件名称（`SimpleProxy`）与软件图标；
+  * 仅保留紧凑优雅的实时运行状态指示器（`● 端口 9898`）与规则计数；
+  * 模式选择器居中对称，界面极其通透专注。
+* **实测截图凭证**：
+  * 浅色模式（纯净顶栏）：`Documentation/screenshots/25_clean_header_light_mode.png`
+  * 深色模式（纯净顶栏）：`Documentation/screenshots/26_clean_header_dark_mode.png`
+  * 配置代码模式（纯净顶栏）：`Documentation/screenshots/27_clean_header_config_mode.png`
+  * 原型图标资产：`Documentation/assets/AppIcon.png` 与 `Documentation/assets/AppIcon.icns`
 
 ---
 

@@ -6,54 +6,29 @@ public struct HeaderBarView: View {
 
     public var body: some View {
         HStack(spacing: 16) {
-            // Left: Traffic Light safety margin + Branding
-            HStack(spacing: 10) {
-                Image(systemName: "arrow.triangle.swap")
-                    .font(.system(size: 13, weight: .bold))
-                    .foregroundStyle(WhistTheme.accent)
-                    .frame(width: 28, height: 28)
-                    .background(WhistTheme.accentSubtle, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
-
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(spacing: 6) {
-                        Text("SimpleProxy")
-                            .font(.system(size: 13, weight: .bold))
-                            .foregroundColor(WhistTheme.labelPrimary)
-
-                        // Running status badge
-                        HStack(spacing: 4) {
-                            Circle()
-                                .fill(viewModel.isServerRunning ? WhistTheme.activeGreen : WhistTheme.labelTertiary)
-                                .frame(width: 6, height: 6)
-                            Text(viewModel.isServerRunning ? "端口 \(String(viewModel.serverPort))" : "已停止")
-                                .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                                .foregroundColor(viewModel.isServerRunning ? WhistTheme.activeGreen : WhistTheme.labelTertiary)
-                                .lineLimit(1)
-                                .fixedSize()
-                        }
-                        .padding(.horizontal, 7)
-                        .padding(.vertical, 2.5)
-                        .background(
-                            Capsule(style: .continuous)
-                                .fill(viewModel.isServerRunning ? WhistTheme.activeGreen.opacity(0.12) : Color.primary.opacity(0.06))
-                        )
-                    }
-
-                    HStack(spacing: 6) {
-                        Text("\(viewModel.rules.count) 条代理规则")
-                            .font(.system(size: 10, weight: .medium))
-                            .foregroundColor(WhistTheme.labelSecondary)
-
-                        if viewModel.matchedRequests > 0 {
-                            Text("•")
-                                .font(.system(size: 10))
-                                .foregroundColor(WhistTheme.labelTertiary)
-                            Text("\(viewModel.matchedRequests) 次命中")
-                                .font(.system(size: 10, weight: .medium))
-                                .foregroundColor(WhistTheme.labelSecondary)
-                        }
-                    }
+            // Left: Traffic Light safety margin + Status indicator
+            HStack(spacing: 8) {
+                // Running status & port badge
+                HStack(spacing: 5) {
+                    Circle()
+                        .fill(viewModel.isServerRunning ? WhistTheme.activeGreen : WhistTheme.labelTertiary)
+                        .frame(width: 6, height: 6)
+                    Text(viewModel.isServerRunning ? "端口 \(String(viewModel.serverPort))" : "已停止")
+                        .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                        .foregroundColor(viewModel.isServerRunning ? WhistTheme.activeGreen : WhistTheme.labelTertiary)
+                        .lineLimit(1)
+                        .fixedSize()
                 }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(
+                    Capsule(style: .continuous)
+                        .fill(viewModel.isServerRunning ? WhistTheme.activeGreen.opacity(0.12) : Color.primary.opacity(0.06))
+                )
+
+                Text("\(viewModel.rules.count) 条规则")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(WhistTheme.labelSecondary)
             }
             .padding(.leading, WhistTheme.trafficLightsMargin)
 

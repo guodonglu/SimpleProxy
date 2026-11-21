@@ -23,19 +23,19 @@
 ## 📸 界面预览
 
 ### 1. 浅色模式原生适配 (Light Mode)
-精细打磨的 iOS 27 / macOS 26+ 晶莹 Liquid Glass 流体毛玻璃质感与 SF 字体，去除繁杂，专注极简代理体验：
+精细打磨的 iOS 27 / macOS 26+ 晶莹 Liquid Glass 流体毛玻璃质感，完全移除窗口内部冗余标题与图标，专注极简纯粹代理体验：
 
-![SimpleProxy Light Mode](Documentation/screenshots/22_simpleproxy_branded_window.png)
+![SimpleProxy Light Mode](Documentation/screenshots/25_clean_header_light_mode.png)
 
 ### 2. 深色模式原生适配 (Dark Mode)
 深邃夜色下的微光折射与高对比度语义化标签，沉静克制：
 
-![SimpleProxy Dark Mode](Documentation/screenshots/23_simpleproxy_dark_mode.png)
+![SimpleProxy Dark Mode](Documentation/screenshots/26_clean_header_dark_mode.png)
 
 ### 3. 文本配置代码模式 (Configuration Mode)
 兼容标准 Whistle 规则语法的纯文本编辑器，支持单色字体、快捷语法模板插入与实时生效状态校验：
 
-![SimpleProxy Config Mode](Documentation/screenshots/24_simpleproxy_config_mode.png)
+![SimpleProxy Config Mode](Documentation/screenshots/27_clean_header_config_mode.png)
 
 ### 4. 原生规则编辑弹窗
 点击「新增规则」或按快捷键 `⌘N` 唤出原生 macOS 毛玻璃表单弹窗：
