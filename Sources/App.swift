@@ -2,22 +2,22 @@ import SwiftUI
 import AppKit
 
 @main
-struct WhistFlowApp: App {
+struct SimpleProxyApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup("SimpleProxy") {
             MainView()
                 .frame(minWidth: 720, minHeight: 460)
-                .background(VisualEffectBackground(material: .sidebar, blendingMode: .behindWindow))
+                .background(VisualEffectBackground(material: .windowBackground, blendingMode: .behindWindow))
         }
         .windowStyle(.hiddenTitleBar)
         .windowToolbarStyle(.unifiedCompact)
         .defaultSize(width: 860, height: 560)
 
         // Menu Bar Companion
-        MenuBarExtra("WhistFlow", systemImage: "waveform.path.ecg") {
-            Text("WhistFlow 极简代理")
+        MenuBarExtra("SimpleProxy", systemImage: "arrow.triangle.swap") {
+            Text("SimpleProxy 极简代理")
                 .font(.headline)
             Divider()
             Text("端口: 127.0.0.1:9898")
@@ -29,7 +29,7 @@ struct WhistFlowApp: App {
                 }
             }
             Divider()
-            Button("退出 WhistFlow") {
+            Button("退出 SimpleProxy") {
                 NSApp.terminate(nil)
             }
             .keyboardShortcut("q")

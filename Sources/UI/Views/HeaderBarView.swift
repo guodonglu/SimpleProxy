@@ -8,15 +8,15 @@ public struct HeaderBarView: View {
         HStack(spacing: 16) {
             // Left: Traffic Light safety margin + Branding
             HStack(spacing: 10) {
-                Image(systemName: "waveform.path.ecg")
-                    .font(.system(size: 14, weight: .bold))
+                Image(systemName: "arrow.triangle.swap")
+                    .font(.system(size: 13, weight: .bold))
                     .foregroundStyle(WhistTheme.accent)
                     .frame(width: 28, height: 28)
                     .background(WhistTheme.accentSubtle, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
 
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 6) {
-                        Text("WhistFlow")
+                        Text("SimpleProxy")
                             .font(.system(size: 13, weight: .bold))
                             .foregroundColor(WhistTheme.labelPrimary)
 

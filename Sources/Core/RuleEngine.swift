@@ -199,7 +199,7 @@ public final class RuleEngine: @unchecked Sendable {
     public static func serializeToWhistle(rules: [ProxyRule]) -> String {
         var lines: [String] = []
         lines.append("# ========================================================")
-        lines.append("# WhistFlow Proxy Rules (Compatible with Whistle syntax)")
+        lines.append("# SimpleProxy Proxy Rules (Compatible with Whistle syntax)")
         lines.append("# Format: <pattern> <operator>")
         lines.append("# ========================================================")
         lines.append("")

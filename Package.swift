@@ -2,16 +2,16 @@
 import PackageDescription
 
 let package = Package(
-    name: "WhistFlow",
+    name: "SimpleProxy",
     platforms: [
         .macOS(.v14)
     ],
     products: [
-        .executable(name: "WhistFlow", targets: ["WhistFlow"])
+        .executable(name: "SimpleProxy", targets: ["SimpleProxy"])
     ],
     targets: [
         .executableTarget(
-            name: "WhistFlow",
+            name: "SimpleProxy",
             path: "Sources"
         )
     ]

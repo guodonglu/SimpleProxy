@@ -44,9 +44,9 @@ public final class ProxyServer: @unchecked Sendable {
             guard let self = self else { return }
             switch state {
             case .ready:
-                print("[WhistFlow] Proxy Server listening on 127.0.0.1:\(self.port)")
+                print("[SimpleProxy] Proxy Server listening on 127.0.0.1:\(self.port)")
             case .failed(let error):
-                print("[WhistFlow] Proxy Server failed: \(error)")
+                print("[SimpleProxy] Proxy Server failed: \(error)")
                 self.stop()
             default:
                 break
@@ -67,7 +67,7 @@ public final class ProxyServer: @unchecked Sendable {
         listener?.cancel()
         listener = nil
         isRunning = false
-        print("[WhistFlow] Proxy Server stopped")
+        print("[SimpleProxy] Proxy Server stopped")
     }
 
     /// Dynamic update port
@@ -178,7 +178,7 @@ public final class ProxyServer: @unchecked Sendable {
         upstream.stateUpdateHandler = { state in
             if case .ready = state {
                 // Send 200 Connection Established to client
-                let response = "HTTP/1.1 200 Connection Established\r\nServer: WhistFlow\r\n\r\n"
+                let response = "HTTP/1.1 200 Connection Established\r\nServer: SimpleProxy\r\n\r\n"
                 clientConn.send(content: response.data(using: .utf8), completion: .contentProcessed({ sendError in
                     if sendError == nil {
                         // Start bidirectional streaming
@@ -233,7 +233,7 @@ public final class ProxyServer: @unchecked Sendable {
         }
 
         // Intercept Local Management Control API
-        if path.hasPrefix("/_whistflow/") || host == "local.whistflow.com" || host == "whistflow.local" {
+        if path.hasPrefix("/_simpleproxy/") || path.hasPrefix("/_whistflow/") || host == "local.simpleproxy.com" || host == "simpleproxy.local" || host == "local.whistflow.com" || host == "whistflow.local" {
             self.handleManagementApi(clientConn: clientConn, method: method, uri: path, rawData: rawData, lines: lines)
             return
         }
@@ -283,7 +283,7 @@ public final class ProxyServer: @unchecked Sendable {
         let statusText = (statusCode == 200) ? "OK" : "Status \(statusCode)"
         let headers = [
             "HTTP/1.1 \(statusCode) \(statusText)",
-            "Server: WhistFlow",
+            "Server: SimpleProxy",
             "Content-Type: \(contentType); charset=utf-8",
             "Content-Length: \(bodyData.count)",
             "Access-Control-Allow-Origin: *",
@@ -301,7 +301,7 @@ public final class ProxyServer: @unchecked Sendable {
 
     // MARK: - Status Code Response Helper
     private func sendStatusCodeResponse(clientConn: NWConnection, code: Int) {
-        let response = "HTTP/1.1 \(code) Status \(code)\r\nServer: WhistFlow\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
+        let response = "HTTP/1.1 \(code) Status \(code)\r\nServer: SimpleProxy\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
         clientConn.send(content: response.data(using: .utf8), completion: .contentProcessed({ _ in
             clientConn.cancel()
         }))
@@ -328,7 +328,7 @@ public final class ProxyServer: @unchecked Sendable {
                     }
                 }))
             } else if case .failed(_) = state {
-                let errResp = "HTTP/1.1 502 Bad Gateway (WhistFlow Target Unreachable)\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
+                let errResp = "HTTP/1.1 502 Bad Gateway (SimpleProxy Target Unreachable)\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
                 clientConn.send(content: errResp.data(using: .utf8), completion: .contentProcessed({ _ in
                     clientConn.cancel()
                 }))
@@ -373,8 +373,9 @@ public final class ProxyServer: @unchecked Sendable {
             bodyString = String(decoding: bodyData, as: UTF8.self)
         }
 
-        // Clean path without query parameters
-        let path = uri.components(separatedBy: "?").first ?? uri
+        // Clean path without query parameters and normalize /_simpleproxy/ -> /_whistflow/
+        let rawPath = uri.components(separatedBy: "?").first ?? uri
+        let path = rawPath.replacingOccurrences(of: "/_simpleproxy/", with: "/_whistflow/")
 
         switch (method.uppercased(), path) {
         case ("GET", "/_whistflow/api/status"):
@@ -552,7 +553,7 @@ public final class ProxyServer: @unchecked Sendable {
         let statusText = (statusCode == 200) ? "OK" : ((statusCode == 404) ? "Not Found" : "Error")
         let headers = [
             "HTTP/1.1 \(statusCode) \(statusText)",
-            "Server: WhistFlow",
+            "Server: SimpleProxy",
             "Content-Type: application/json; charset=utf-8",
             "Content-Length: \(bodyData.count)",
             "Access-Control-Allow-Origin: *",

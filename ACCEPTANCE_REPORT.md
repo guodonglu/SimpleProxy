@@ -158,12 +158,25 @@
 * **Skill 路径**：`~/.agents/skill/whistflow/SKILL.md`
 * **功能**：包含完整的 YAML Frontmatter、CLI 与 REST API 驱动手册、Whistle 语法速查表、安全隔离指导，支持各类 Coding Agent 直接操作。
 
+### 5. SimpleProxy 品牌更名与 iOS 27 Liquid Glass 应用图标设计
+* **软件更名**：全项目（SwiftUI 界面、Info.plist、Package.swift、API 端点、CLI、Skill）正式更名为 **SimpleProxy**。
+* **图标设计**：采用极简 iOS 27 / macOS Liquid Glass 设计语言，包含：
+  * Apple 连续超椭圆（Continuous Squircle）剪影；
+  * 光学流体毛玻璃质感与边缘焦散折射（Caustics & Rim Light）；
+  * 纯粹优雅的流体代理无尽循环管道（Cyan & Electric Blue Loop Conduit），0 文字、纯净去繁；
+  * 生成 16x16 至 1024x1024 全套 Retina `.icns` 格式，嵌入 `SimpleProxy.app` 原生 Bundle。
+* **截图凭证**：
+  * SimpleProxy 浅色模式：`Documentation/screenshots/22_simpleproxy_branded_window.png`
+  * SimpleProxy 深色模式：`Documentation/screenshots/23_simpleproxy_dark_mode.png`
+  * SimpleProxy 配置代码模式：`Documentation/screenshots/24_simpleproxy_config_mode.png`
+  * 原型图标：`Documentation/assets/AppIcon.png` 与 `Documentation/assets/AppIcon.icns`
+
 ---
 
 ## 五、 验收总结
-经过完整的功能验证、CUA 界面截图比对、性能基准压测与隔离网络实测，**WhistFlow** 严格达成了所有需求指标：
-1. 原生 Swift 纯净无依赖，安装包仅 1.2 MB，内存 ~9.4 MB，启动 2.9 ms；
-2. 完整 macOS 26/27 视觉设计规范（支持深色/浅色模式）与双模式无缝切换；
+经过完整的功能验证、CUA 界面截图比对、性能基准压测与隔离网络实测，**SimpleProxy**（原 WhistFlow）严格达成了所有需求指标：
+1. 原生 Swift 纯净无依赖，安装包仅 3.1 MB（含完整 Retina 图标包，二进制仅 1.2 MB），内存 ~9.4 MB，启动 2.9 ms；
+2. 完整 iOS 27 / macOS 26/27 视觉设计规范（支持深色/浅色模式、Liquid Glass 玻璃材质与专属极简光感图标）与双模式无缝切换；
 3. 规则实时热更新、支持导入导出；
-4. 提供开箱即用的 `whistflow` CLI、开放 REST API 以及专属配套 Skill；
+4. 提供开箱即用的 `simpleproxy` CLI、开放 REST API 以及专属配套 Skill；
 5. 对主机现有 Clash 环境 100% 零干扰安全隔离。

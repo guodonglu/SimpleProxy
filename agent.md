@@ -58,6 +58,23 @@ This document is maintained continuously across turns to preserve context, archi
   - [x] Light Mode (浅色模式) implementation with explicit switcher & system auto adaptation.
   - [x] Light Mode UI verification with screenshots (14_appearance_light.png, 15_appearance_light_config.png).
   - [x] Built-in Local REST Control API on `127.0.0.1:9898/_whistflow/api/` for dynamic control.
+  - [x] Lightweight CLI controller `bin/whistflow` (zero dependencies, Python 3).
+  - [x] Companion Skill `whistflow` installed to `~/.agents/skill/whistflow` with full documentation.
+- [x] **Milestone 7: UI/UX Pro Max Optimization & Streamlined Interface**
+  - [x] Removed redundant memory metrics from main UI.
+  - [x] Light mode optical contrast enhancement with crisp borders, subtle shadows, and distinct card backgrounds.
+  - [x] Removed "视图模式" picker label for ultra-minimalist header aesthetics.
+  - [x] Verified with screenshots 16-21.
+- [x] **Milestone 8: Rebranding to SimpleProxy & iOS 27 Liquid Glass App Icon**
+  - [x] Rebranded application across all UI, ViewModel, CLI, and bundle manifests to `SimpleProxy`.
+  - [x] Designed ultra-minimalist iOS 27 Liquid Glass app icon (Apple continuous squircle, optical glass caustics, glowing infinity proxy conduit).
+  - [x] Generated multi-resolution `AppIcon.icns` (16x16 to 1024x1024) and linked into `SimpleProxy.app/Contents/Info.plist`.
+  - [x] Updated CLI to `bin/simpleproxy` and installed `simpleproxy` skill into `~/.agents/skill/simpleproxy`.
+  - [x] Verified with screenshots:
+    - `22_simpleproxy_branded_window.png` (Light Visual Mode)
+    - `23_simpleproxy_dark_mode.png` (Dark Visual Mode)
+    - `24_simpleproxy_config_mode.png` (Config Code Mode)
+  - [x] Updated documentation and pushed to GitHub.
   - [x] `whistflow` CLI executable script installed to `~/.local/bin/whistflow`.
   - [x] Official companion skill authored at `~/.agents/skill/whistflow/SKILL.md`.
 - [x] **Milestone 7: UI/UX Pro Max Skill Installation & UI/UX De-cluttering Polish**
@@ -69,7 +86,7 @@ This document is maintained continuously across turns to preserve context, archi
 
 ## 4. Current State
 - All milestones fully delivered and verified.
-- Production app: `WhistFlow.app` (1.2 MB).
-- CLI tool: `whistflow` in `~/.local/bin/whistflow`.
-- Agent Skills: `ui-ux-pro-max` and `whistflow` in `~/.agents/skill/`.
+- Production app: `SimpleProxy.app` (3.1 MB, native binary 1.2 MB + Retina AppIcon.icns).
+- CLI tool: `simpleproxy` in `~/.local/bin/simpleproxy` (and `whistflow` alias).
+- Agent Skills: `simpleproxy`, `ui-ux-pro-max`, and `whistflow` in `~/.agents/skill/`.
 - GitHub repository: `https://github.com/guodonglu/WhistFlow`.

@@ -73,7 +73,7 @@ public final class ProxyViewModel: ObservableObject, ProxyServerDelegate {
         // Initialize default sample rules showcase
         let defaultText = """
         # ========================================================
-        # WhistFlow 默认规则 (兼容 Whistle 语法)
+        # SimpleProxy 默认规则 (兼容 Whistle 语法)
         # ========================================================
 
         # 1. Hosts 域名映射：将线上 API 映射至本地研发端口
@@ -284,8 +284,8 @@ public final class ProxyViewModel: ObservableObject, ProxyServerDelegate {
     // MARK: - Import & Export
     public func exportConfiguration() {
         let panel = NSSavePanel()
-        panel.title = "导出 WhistFlow 代理配置"
-        panel.nameFieldStringValue = "whistflow_rules.txt"
+        panel.title = "导出 SimpleProxy 代理配置"
+        panel.nameFieldStringValue = "simpleproxy_rules.txt"
         panel.canCreateDirectories = true
         panel.allowedContentTypes = [.plainText]
 
@@ -300,7 +300,7 @@ public final class ProxyViewModel: ObservableObject, ProxyServerDelegate {
 
     public func importConfiguration() {
         let panel = NSOpenPanel()
-        panel.title = "导入 WhistFlow 代理配置"
+        panel.title = "导入 SimpleProxy 代理配置"
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = false
         panel.canChooseFiles = true

@@ -1,0 +1,208 @@
+#!/usr/bin/env python3
+"""
+SimpleProxy Command Line Interface (CLI)
+Lightweight control utility for SimpleProxy native macOS proxy server.
+Zero external dependencies. Works directly with SimpleProxy local management API.
+"""
+
+import sys
+import os
+import json
+import urllib.request
+import urllib.error
+import argparse
+
+DEFAULT_HOST = "127.0.0.1"
+DEFAULT_PORT = 9898
+BASE_URL = f"http://{DEFAULT_HOST}:{DEFAULT_PORT}/_simpleproxy/api"
+
+# ANSI Colors for terminal output
+CYAN = "\033[36m"
+GREEN = "\033[32m"
+YELLOW = "\033[33m"
+RED = "\033[31m"
+BOLD = "\033[1m"
+DIM = "\033[2m"
+RESET = "\033[0m"
+
+def api_call(endpoint: str, data: dict = None, method: str = None) -> dict:
+    url = f"{BASE_URL}/{endpoint}"
+    req = urllib.request.Request(url)
+    if data is not None:
+        req.data = json.dumps(data).encode("utf-8")
+        req.add_header("Content-Type", "application/json")
+        req.method = method or "POST"
+    elif method:
+        req.method = method
+
+    try:
+        with urllib.request.urlopen(req, timeout=3.0) as resp:
+            content = resp.read().decode("utf-8")
+            return json.loads(content)
+    except urllib.error.URLError as e:
+        print(f"{RED}Error: Cannot connect to SimpleProxy at 127.0.0.1:{DEFAULT_PORT}.{RESET}", file=sys.stderr)
+        print(f"{DIM}Make sure SimpleProxy.app is running.{RESET}", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"{RED}Error:{RESET} {e}", file=sys.stderr)
+        sys.exit(1)
+
+def cmd_status(args):
+    data = api_call("status")
+    print(f"\n{BOLD}{CYAN}=== SimpleProxy macOS Proxy Status ==={RESET}")
+    status_color = GREEN if data.get("status") == "running" else RED
+    print(f"  {BOLD}Status:{RESET}          {status_color}{data.get('status', 'unknown').upper()}{RESET}")
+    print(f"  {BOLD}Local Port:{RESET}      {CYAN}{data.get('port', DEFAULT_PORT)}{RESET}")
+    print(f"  {BOLD}Active Rules:{RESET}    {data.get('rules_count', 0)}")
+    print(f"  {BOLD}Total Requests:{RESET}  {data.get('total_requests', 0)}")
+    print(f"  {BOLD}Matched Hits:{RESET}    {GREEN}{data.get('matched_requests', 0)}{RESET}")
+    print(f"  {BOLD}Version:{RESET}         v{data.get('version', '1.0.0')}\n")
+
+def cmd_rules(args):
+    data = api_call("rules")
+    rules = data.get("rules", [])
+    print(f"\n{BOLD}{CYAN}=== SimpleProxy Configured Rules ({len(rules)}) ==={RESET}")
+    if not rules:
+        print(f"  {DIM}(No rules configured){RESET}\n")
+        return
+
+    for idx, rule in enumerate(rules, 1):
+        status_tag = f"{GREEN}[ON]{RESET}" if rule.get("isEnabled") else f"{DIM}[OFF]{RESET}"
+        rule_type = rule.get("type", "custom").upper()
+        pattern = rule.get("pattern", "")
+        target = rule.get("target", "")
+        comment = f" {DIM}# {rule['comment']}{RESET}" if rule.get("comment") else ""
+        print(f"  {idx:2d}. {status_tag} {YELLOW}{rule_type:<10}{RESET} {BOLD}{pattern}{RESET} -> {CYAN}{target}{RESET}{comment}")
+    print()
+
+def cmd_add_rule(args):
+    payload = {
+        "pattern": args.pattern,
+        "target": args.target,
+        "type": args.type,
+        "isEnabled": True,
+        "comment": args.comment or ""
+    }
+    res = api_call("rules/add", data=payload)
+    if res.get("success"):
+        print(f"{GREEN}✓ Rule added successfully:{RESET} {BOLD}{args.pattern}{RESET} -> {CYAN}{args.target}{RESET}")
+    else:
+        print(f"{RED}Failed to add rule:{RESET} {res.get('error', 'Unknown error')}")
+
+def cmd_toggle_rule(args):
+    payload = {
+        "index": args.index - 1,
+        "isEnabled": not args.disable
+    }
+    res = api_call("rules/toggle", data=payload)
+    if res.get("success"):
+        state_str = f"{RED}disabled{RESET}" if args.disable else f"{GREEN}enabled{RESET}"
+        print(f"{GREEN}✓ Rule #{args.index} {state_str}.{RESET}")
+    else:
+        print(f"{RED}Failed to toggle rule:{RESET} {res.get('error', 'Unknown error')}")
+
+def cmd_delete_rule(args):
+    payload = {"index": args.index - 1}
+    res = api_call("rules/delete", data=payload)
+    if res.get("success"):
+        print(f"{GREEN}✓ Rule #{args.index} deleted.{RESET}")
+    else:
+        print(f"{RED}Failed to delete rule:{RESET} {res.get('error', 'Unknown error')}")
+
+def cmd_sync_raw(args):
+    if args.file:
+        with open(args.file, "r", encoding="utf-8") as f:
+            raw_text = f.read()
+    elif args.text:
+        raw_text = args.text
+    else:
+        print(f"{RED}Error: Provide either --file or --text.{RESET}", file=sys.stderr)
+        sys.exit(1)
+
+    payload = {"raw": raw_text}
+    res = api_call("rules/raw", data=payload)
+    if res.get("success"):
+        print(f"{GREEN}✓ Configuration synchronized ({res.get('rules_count', 0)} rules parsed).{RESET}")
+    else:
+        print(f"{RED}Failed to sync config:{RESET} {res.get('error')}")
+
+def cmd_theme(args):
+    mode = args.mode.lower()
+    data = api_call("appearance", {"mode": mode})
+    print(f"{GREEN}✓ Appearance mode switched to:{RESET} {BOLD}{mode}{RESET}")
+
+def cmd_mode(args):
+    mode = args.mode.lower()
+    data = api_call("mode", {"mode": mode})
+    print(f"{GREEN}✓ Window view mode switched to:{RESET} {BOLD}{mode}{RESET}")
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="SimpleProxy CLI - Ultra-lightweight native macOS proxy controller",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  simpleproxy status
+  simpleproxy rules
+  simpleproxy add "api.internal.com" "127.0.0.1:3000" --type host -c "Local dev redirect"
+  simpleproxy add "cdn.example.com/api" '{"code":200,"msg":"mocked"}' --type resBody
+  simpleproxy toggle 1 --disable
+  simpleproxy delete 2
+  simpleproxy sync --file ./my_rules.txt
+  simpleproxy theme light
+        """
+    )
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
+
+    # status
+    p_status = subparsers.add_parser("status", help="Show current proxy status and metrics")
+    p_status.set_defaults(func=cmd_status)
+
+    # rules
+    p_rules = subparsers.add_parser("rules", help="List all current rules")
+    p_rules.set_defaults(func=cmd_rules)
+
+    # add
+    p_add = subparsers.add_parser("add", help="Add a new proxy rule")
+    p_add.add_argument("pattern", help="Match pattern (e.g. domain, path, regex)")
+    p_add.add_argument("target", help="Action target (e.g. host, mock body, status code)")
+    p_add.add_argument("--type", choices=["host", "resBody", "redirect", "statusCode", "reqHeaders", "resHeaders", "custom"], default="custom", help="Rule type")
+    p_add.add_argument("-c", "--comment", help="Rule description/comment")
+    p_add.set_defaults(func=cmd_add_rule)
+
+    # toggle
+    p_toggle = subparsers.add_parser("toggle", help="Toggle rule state (enable/disable)")
+    p_toggle.add_argument("index", type=int, help="Rule 1-based index")
+    p_toggle.add_argument("--disable", action="store_true", help="Disable the rule (default: enable)")
+    p_toggle.set_defaults(func=cmd_toggle_rule)
+
+    # delete
+    p_del = subparsers.add_parser("delete", help="Delete a rule by index")
+    p_del.add_argument("index", type=int, help="Rule 1-based index")
+    p_del.set_defaults(func=cmd_delete_rule)
+
+    # sync
+    p_sync = subparsers.add_parser("sync", help="Synchronize raw Whistle/SimpleProxy configuration text")
+    p_sync.add_argument("--file", help="Path to raw config text file")
+    p_sync.add_argument("--text", help="Raw config string directly")
+    p_sync.set_defaults(func=cmd_sync_raw)
+
+    # theme
+    p_theme = subparsers.add_parser("theme", help="Set appearance theme (light, dark, system)")
+    p_theme.add_argument("mode", choices=["light", "dark", "system"], help="Theme mode")
+    p_theme.set_defaults(func=cmd_theme)
+
+    # mode
+    p_mode = subparsers.add_parser("mode", help="Switch window view mode (visual, config)")
+    p_mode.add_argument("mode", choices=["visual", "config"], help="View mode")
+    p_mode.set_defaults(func=cmd_mode)
+
+    args = parser.parse_args()
+    if not args.command:
+        parser.print_help()
+        sys.exit(0)
+
+    args.func(args)
+
+if __name__ == "__main__":
+    main()
