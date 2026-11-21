@@ -11,11 +11,11 @@ public struct HeaderBarView: View {
                 // Running status & port badge
                 HStack(spacing: 5) {
                     Circle()
-                        .fill(viewModel.isServerRunning ? WhistTheme.activeGreen : WhistTheme.labelTertiary)
+                        .fill(viewModel.isServerRunning ? ProxyTheme.activeGreen : ProxyTheme.labelTertiary)
                         .frame(width: 6, height: 6)
                     Text(viewModel.isServerRunning ? "端口 \(String(viewModel.serverPort))" : "已停止")
                         .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                        .foregroundColor(viewModel.isServerRunning ? WhistTheme.activeGreen : WhistTheme.labelTertiary)
+                        .foregroundColor(viewModel.isServerRunning ? ProxyTheme.activeGreen : ProxyTheme.labelTertiary)
                         .lineLimit(1)
                         .fixedSize()
                 }
@@ -23,14 +23,14 @@ public struct HeaderBarView: View {
                 .padding(.vertical, 4)
                 .background(
                     Capsule(style: .continuous)
-                        .fill(viewModel.isServerRunning ? WhistTheme.activeGreen.opacity(0.12) : Color.primary.opacity(0.06))
+                        .fill(viewModel.isServerRunning ? ProxyTheme.activeGreen.opacity(0.12) : Color.primary.opacity(0.06))
                 )
 
                 Text("\(viewModel.rules.count) 条规则")
                     .font(.system(size: 11, weight: .medium))
-                    .foregroundColor(WhistTheme.labelSecondary)
+                    .foregroundColor(ProxyTheme.labelSecondary)
             }
-            .padding(.leading, WhistTheme.trafficLightsMargin)
+            .padding(.leading, ProxyTheme.trafficLightsMargin)
 
             Spacer()
 
@@ -57,7 +57,7 @@ public struct HeaderBarView: View {
                         .font(.system(size: 12, weight: .medium))
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(WhistTheme.accent)
+                .tint(ProxyTheme.accent)
                 .controlSize(.regular)
                 .keyboardShortcut("n", modifiers: .command)
 
@@ -89,7 +89,7 @@ public struct HeaderBarView: View {
                 } label: {
                     Image(systemName: viewModel.appearanceMode.icon)
                         .font(.system(size: 13, weight: .medium))
-                        .foregroundColor(WhistTheme.labelSecondary)
+                        .foregroundColor(ProxyTheme.labelSecondary)
                 }
                 .buttonStyle(.plain)
                 .help("切换外观模式: 当前为 \(viewModel.appearanceMode.rawValue)")
@@ -101,7 +101,7 @@ public struct HeaderBarView: View {
                 } label: {
                     Image(systemName: viewModel.isServerRunning ? "power.circle.fill" : "power.circle")
                         .font(.system(size: 15, weight: .semibold))
-                        .foregroundColor(viewModel.isServerRunning ? WhistTheme.activeGreen : WhistTheme.labelTertiary)
+                        .foregroundColor(viewModel.isServerRunning ? ProxyTheme.activeGreen : ProxyTheme.labelTertiary)
                 }
                 .buttonStyle(.plain)
                 .help(viewModel.isServerRunning ? "停止代理服务" : "启动代理服务")

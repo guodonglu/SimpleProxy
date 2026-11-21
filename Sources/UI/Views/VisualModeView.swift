@@ -18,14 +18,14 @@ public struct VisualModeView: View {
                         } label: {
                             Text(filter.rawValue)
                                 .font(.system(size: 11, weight: viewModel.filterType == filter ? .semibold : .medium))
-                                .foregroundColor(viewModel.filterType == filter ? WhistTheme.accent : WhistTheme.labelSecondary)
+                                .foregroundColor(viewModel.filterType == filter ? ProxyTheme.accent : ProxyTheme.labelSecondary)
                                 .padding(.horizontal, 10)
                                 .padding(.vertical, 4.5)
                                 .background(
                                     Capsule(style: .continuous)
                                         .fill(
                                             viewModel.filterType == filter
-                                                ? WhistTheme.accentSubtle
+                                                ? ProxyTheme.accentSubtle
                                                 : (colorScheme == .light ? Color.black.opacity(0.04) : Color.white.opacity(0.06))
                                         )
                                 )
@@ -41,7 +41,7 @@ public struct VisualModeView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "magnifyingglass")
                         .font(.system(size: 11))
-                        .foregroundColor(WhistTheme.labelTertiary)
+                        .foregroundColor(ProxyTheme.labelTertiary)
                     TextField("搜索域名、路径或目标...", text: $viewModel.searchText)
                         .textFieldStyle(.plain)
                         .font(.system(size: 11))
@@ -52,7 +52,7 @@ public struct VisualModeView: View {
                         } label: {
                             Image(systemName: "xmark.circle.fill")
                                 .font(.system(size: 11))
-                                .foregroundColor(WhistTheme.labelTertiary)
+                                .foregroundColor(ProxyTheme.labelTertiary)
                         }
                         .buttonStyle(.plain)
                         .accessibilityLabel("清空搜索")
@@ -81,13 +81,13 @@ public struct VisualModeView: View {
                     Spacer()
                     Image(systemName: "slider.horizontal.2.square")
                         .font(.system(size: 36, weight: .light))
-                        .foregroundColor(WhistTheme.labelTertiary)
+                        .foregroundColor(ProxyTheme.labelTertiary)
                     Text(viewModel.rules.isEmpty ? "暂无代理规则" : "没有符合筛选条件的规则")
                         .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(WhistTheme.labelSecondary)
+                        .foregroundColor(ProxyTheme.labelSecondary)
                     Text("点击上方「新增规则」或切换至「配置代码模式」直接编写")
                         .font(.system(size: 12))
-                        .foregroundColor(WhistTheme.labelTertiary)
+                        .foregroundColor(ProxyTheme.labelTertiary)
                     Button {
                         viewModel.editingRule = nil
                         viewModel.isShowingRuleSheet = true
@@ -159,7 +159,7 @@ public struct MacToggle: View {
         } label: {
             ZStack(alignment: isOn ? .trailing : .leading) {
                 Capsule(style: .continuous)
-                    .fill(isOn ? WhistTheme.accent : offTrack)
+                    .fill(isOn ? ProxyTheme.accent : offTrack)
                     .frame(width: 34, height: 20)
 
                 Circle()
@@ -186,10 +186,10 @@ struct RuleCardRow: View {
         let isLight = (colorScheme == .light)
         let primaryText = rule.isEnabled
             ? (isLight ? Color(red: 0.11, green: 0.13, blue: 0.17) : Color.white)
-            : WhistTheme.labelTertiary
+            : ProxyTheme.labelTertiary
         let secondaryText = rule.isEnabled
             ? (isLight ? Color(red: 0.32, green: 0.36, blue: 0.42) : Color.white.opacity(0.70))
-            : WhistTheme.labelTertiary
+            : ProxyTheme.labelTertiary
 
         HStack(spacing: 14) {
             // 1. Instant Real-time Toggle Switch with Crystal Clear Visual State
@@ -221,7 +221,7 @@ struct RuleCardRow: View {
                     if let comment = rule.comment, !comment.isEmpty {
                         Text("// \(comment)")
                             .font(.system(size: 11))
-                            .foregroundColor(WhistTheme.labelTertiary)
+                            .foregroundColor(ProxyTheme.labelTertiary)
                     }
                 }
 
@@ -229,7 +229,7 @@ struct RuleCardRow: View {
                 HStack(spacing: 6) {
                     Image(systemName: "arrow.right")
                         .font(.system(size: 9, weight: .semibold))
-                        .foregroundColor(WhistTheme.labelTertiary)
+                        .foregroundColor(ProxyTheme.labelTertiary)
                     Text(rule.action.displayTarget)
                         .font(.system(size: 11, design: .monospaced))
                         .foregroundColor(secondaryText)
@@ -250,7 +250,7 @@ struct RuleCardRow: View {
                         .font(.system(size: 11, weight: .medium))
                 }
                 .buttonStyle(.plain)
-                .foregroundColor(WhistTheme.labelSecondary)
+                .foregroundColor(ProxyTheme.labelSecondary)
                 .help("编辑规则")
 
                 // Duplicate
@@ -261,7 +261,7 @@ struct RuleCardRow: View {
                         .font(.system(size: 11, weight: .medium))
                 }
                 .buttonStyle(.plain)
-                .foregroundColor(WhistTheme.labelSecondary)
+                .foregroundColor(ProxyTheme.labelSecondary)
                 .help("复制此规则")
 
                 // Delete
@@ -272,14 +272,14 @@ struct RuleCardRow: View {
                         .font(.system(size: 11, weight: .medium))
                 }
                 .buttonStyle(.plain)
-                .foregroundColor(WhistTheme.errorRed.opacity(0.85))
+                .foregroundColor(ProxyTheme.errorRed.opacity(0.85))
                 .help("删除此规则")
             }
             .opacity(isHovered ? 1.0 : 0.35)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 10)
-        .glassCard(cornerRadius: WhistTheme.cardRadius, isHighlighted: isHovered)
+        .glassCard(cornerRadius: ProxyTheme.cardRadius, isHighlighted: isHovered)
         .onHover { hovering in
             withAnimation(.easeInOut(duration: 0.12)) {
                 isHovered = hovering

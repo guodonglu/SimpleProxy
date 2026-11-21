@@ -32,13 +32,13 @@ public struct RuleEditSheet: View {
             HStack {
                 Text(viewModel.editingRule == nil ? "新增代理规则" : "编辑代理规则")
                     .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(WhistTheme.labelPrimary)
+                    .foregroundColor(ProxyTheme.labelPrimary)
                 Spacer()
                 Button("取消") {
                     dismiss()
                 }
                 .buttonStyle(.plain)
-                .foregroundColor(WhistTheme.labelSecondary)
+                .foregroundColor(ProxyTheme.labelSecondary)
             }
             .padding(.horizontal, 20)
             .padding(.top, 18)
@@ -81,11 +81,11 @@ public struct RuleEditSheet: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("返回 Body (JSON 或纯文本):")
                                 .font(.system(size: 11))
-                                .foregroundColor(WhistTheme.labelSecondary)
+                                .foregroundColor(ProxyTheme.labelSecondary)
                             TextEditor(text: $mockBody)
                                 .font(.system(size: 12, design: .monospaced))
                                 .frame(height: 90)
-                                .border(WhistTheme.cardBorder, width: 0.5)
+                                .border(ProxyTheme.cardBorder, width: 0.5)
                         }
                     } else if ruleTypeIndex == 2 {
                         // Remote
@@ -120,7 +120,7 @@ public struct RuleEditSheet: View {
                     dismiss()
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(WhistTheme.accent)
+                .tint(ProxyTheme.accent)
                 .keyboardShortcut(.defaultAction)
                 .disabled(pattern.trimmingCharacters(in: .whitespaces).isEmpty)
             }

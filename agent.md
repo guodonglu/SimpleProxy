@@ -1,9 +1,9 @@
-# WhistFlow - Agent Context & Memory Log
+# SimpleProxy - Agent Context & Memory Log
 
 This document is maintained continuously across turns to preserve context, architecture decisions, and task execution progress.
 
 ## 1. Project Overview & Requirements
-- **Product Name**: WhistFlow
+- **Product Name**: SimpleProxy
 - **Type**: Native macOS Proxy Application (Swift / SwiftUI / Network.framework)
 - **Design Target**: macOS 26/27 Human Interface Guidelines (Liquid Glass vibrancy, squircle radius, single accent color, semantic labels, integrated title bar with 78pt traffic light offset).
 - **Core Functionality**:
@@ -53,40 +53,29 @@ This document is maintained continuously across turns to preserve context, archi
   - [x] Complete `README.md` with features, screenshots, and architecture.
   - [x] Produce `ACCEPTANCE_REPORT.md` with complete test evidence.
   - [x] Initialize Git repository, commit clean code.
-  - [x] Create GitHub repository via `gh` and push to `https://github.com/guodonglu/WhistFlow`.
+  - [x] Create GitHub repository via `gh` and push to `https://github.com/guodonglu/SimpleProxy`.
 - [x] **Milestone 6: Light Mode, CLI Tool, Management API & Companion Skill**
   - [x] Light Mode (浅色模式) implementation with explicit switcher & system auto adaptation.
-  - [x] Light Mode UI verification with screenshots (14_appearance_light.png, 15_appearance_light_config.png).
-  - [x] Built-in Local REST Control API on `127.0.0.1:9898/_whistflow/api/` for dynamic control.
-  - [x] Lightweight CLI controller `bin/whistflow` (zero dependencies, Python 3).
-  - [x] Companion Skill `whistflow` installed to `~/.agents/skill/whistflow` with full documentation.
+  - [x] Built-in Local REST Control API on `127.0.0.1:9898/_simpleproxy/api/` for dynamic control.
+  - [x] Lightweight CLI controller `bin/simpleproxy` (zero dependencies, Python 3).
+  - [x] Companion Skill `simpleproxy` installed to `~/.agents/skill/simpleproxy` with full documentation.
 - [x] **Milestone 7: UI/UX Pro Max Optimization & Streamlined Interface**
+  - [x] Installed `ui-ux-pro-max` skill from `nextlevelbuilder/ui-ux-pro-max-skill` to `~/.agents/skill/ui-ux-pro-max/`.
   - [x] Removed redundant memory metrics from main UI.
   - [x] Light mode optical contrast enhancement with crisp borders, subtle shadows, and distinct card backgrounds.
-  - [x] Removed "视图模式" picker label for ultra-minimalist header aesthetics.
+  - [x] Removed redundant "视图模式" picker label for clean, centered segmented control.
   - [x] Verified with screenshots 16-21.
-- [x] **Milestone 8: Rebranding to SimpleProxy & iOS 27 Liquid Glass App Icon**
+- [x] **Milestone 8: Rebranding to SimpleProxy & Ultra-Minimalist App Icon**
   - [x] Rebranded application across all UI, ViewModel, CLI, and bundle manifests to `SimpleProxy`.
-  - [x] Updated CLI to `bin/simpleproxy` and installed `simpleproxy` skill into `~/.agents/skill/simpleproxy`.
-- [x] **Milestone 9: Ultra-Minimalist Native Vector App Icon & Complete Header De-Cluttering**
-  - [x] Replaced AI-generated glossy 3D icon with ultra-clean, human-grade Apple CoreGraphics vector icon (continuous squircle, dark obsidian glass plate, specular rim bevel, ambient backlight, and iconic Apple proxy interchange glyph in Electric Sky Blue to Apple System Blue).
-  - [x] Rebuilt Retina `.icns` bundle (`AppIcon.icns`) and verified multi-resolution sharpness.
+  - [x] Pure Apple CoreGraphics vector icon (continuous squircle, dark obsidian glass plate, specular rim bevel, ambient backlight, and iconic Apple proxy interchange glyph in Electric Sky Blue to Apple System Blue).
+  - [x] Built Retina `.icns` bundle (`AppIcon.icns`) and verified multi-resolution sharpness.
   - [x] Completely removed app name ("SimpleProxy") and app icon from `HeaderBarView.swift` inside the window, retaining only the clean port badge (`● 端口 9898`) and rule count.
   - [x] Captured verified screenshots:
     - `25_clean_header_light_mode.png` (Light Visual Mode)
     - `26_clean_header_dark_mode.png` (Dark Visual Mode)
     - `27_clean_header_config_mode.png` (Config Code Mode)
   - [x] Updated documentation and pushed to GitHub.
-  - [x] `whistflow` CLI executable script installed to `~/.local/bin/whistflow`.
-  - [x] Official companion skill authored at `~/.agents/skill/whistflow/SKILL.md`.
-- [x] **Milestone 7: UI/UX Pro Max Skill Installation & UI/UX De-cluttering Polish**
-  - [x] Installed `ui-ux-pro-max` skill from `nextlevelbuilder/ui-ux-pro-max-skill` to `~/.agents/skill/ui-ux-pro-max/`.
-  - [x] Eliminated redundant debug stats (removed "内存占用" from header bar and stopped background memory timer).
-  - [x] Revamped Light Mode palette & materials: eliminated muddy gray tones, applied luminous clean white frosted glass cards and silky background gradient.
-  - [x] Removed redundant "视图模式" picker label for clean, centered segmented control.
-  - [x] Verified and captured screenshots `19_light_mode_no_picker_label.png`, `20_light_mode_config_no_picker_label.png`, and `21_dark_mode_no_picker_label.png`.
-
-- [x] **Milestone 10: Professional Native Cocoa Code Editor with Full Undo/Redo & Shortcuts**
+- [x] **Milestone 9: Professional Native Cocoa Code Editor with Full Undo/Redo & Shortcuts**
   - [x] Replaced primitive SwiftUI `TextEditor` with high-performance `CodeEditorView` based on native `NSTextView`.
   - [x] Full native `UndoManager` integration: `⌘Z` (撤回) and `⇧⌘Z` (重做) working seamlessly for all typing, deletions, and edits.
   - [x] Added `⌘/` shortcut for toggling line comments (`# `) on single line or multi-line selections with undo grouping.
@@ -98,6 +87,6 @@ This document is maintained continuously across turns to preserve context, archi
 ## 4. Current State
 - All milestones fully delivered and verified.
 - Production app: `SimpleProxy.app` (3.1 MB, native binary 1.2 MB + Retina AppIcon.icns).
-- CLI tool: `simpleproxy` in `~/.local/bin/simpleproxy` (and `whistflow` alias).
-- Agent Skills: `simpleproxy`, `ui-ux-pro-max`, and `whistflow` in `~/.agents/skill/`.
-- GitHub repository: `https://github.com/guodonglu/WhistFlow`.
+- CLI tool: `simpleproxy` in `~/.local/bin/simpleproxy`.
+- Agent Skills: `simpleproxy` and `ui-ux-pro-max` in `~/.agents/skill/`.
+- GitHub repository: `https://github.com/guodonglu/SimpleProxy`.

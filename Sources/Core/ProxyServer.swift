@@ -15,7 +15,7 @@ public final class ProxyServer: @unchecked Sendable {
     public weak var delegate: ProxyServerDelegate?
 
     private var listener: NWListener?
-    private let queue = DispatchQueue(label: "com.whistflow.proxy.server", attributes: .concurrent)
+    private let queue = DispatchQueue(label: "com.simpleproxy.proxy.server", attributes: .concurrent)
     private var isRunning: Bool = false
     public private(set) var port: UInt16
 
@@ -233,7 +233,7 @@ public final class ProxyServer: @unchecked Sendable {
         }
 
         // Intercept Local Management Control API
-        if path.hasPrefix("/_simpleproxy/") || path.hasPrefix("/_whistflow/") || host == "local.simpleproxy.com" || host == "simpleproxy.local" || host == "local.whistflow.com" || host == "whistflow.local" {
+        if path.hasPrefix("/_simpleproxy/") || host == "local.simpleproxy.com" || host == "simpleproxy.local" {
             self.handleManagementApi(clientConn: clientConn, method: method, uri: path, rawData: rawData, lines: lines)
             return
         }
@@ -373,12 +373,12 @@ public final class ProxyServer: @unchecked Sendable {
             bodyString = String(decoding: bodyData, as: UTF8.self)
         }
 
-        // Clean path without query parameters and normalize /_simpleproxy/ -> /_whistflow/
+        // Clean path without query parameters
         let rawPath = uri.components(separatedBy: "?").first ?? uri
-        let path = rawPath.replacingOccurrences(of: "/_simpleproxy/", with: "/_whistflow/")
+        let path = rawPath
 
         switch (method.uppercased(), path) {
-        case ("GET", "/_whistflow/api/status"):
+        case ("GET", "/_simpleproxy/api/status"):
             let rules = ruleEngine.getRules()
             let response: [String: Any] = [
                 "status": isRunning ? "running" : "stopped",
@@ -390,7 +390,7 @@ public final class ProxyServer: @unchecked Sendable {
             ]
             sendJsonResponse(clientConn: clientConn, json: response, statusCode: 200)
 
-        case ("GET", "/_whistflow/api/rules"):
+        case ("GET", "/_simpleproxy/api/rules"):
             let rules = ruleEngine.getRules()
             let rulesList: [[String: Any]] = rules.map { rule in
                 return [
@@ -411,7 +411,7 @@ public final class ProxyServer: @unchecked Sendable {
             ]
             sendJsonResponse(clientConn: clientConn, json: response, statusCode: 200)
 
-        case ("POST", "/_whistflow/api/rules/add"):
+        case ("POST", "/_simpleproxy/api/rules/add"):
             var lineToParse = ""
             if let bodyData = bodyString.data(using: .utf8),
                let json = try? JSONSerialization.jsonObject(with: bodyData) as? [String: Any] {
@@ -442,7 +442,7 @@ public final class ProxyServer: @unchecked Sendable {
                 "raw": newRule.toWhistleLine()
             ], statusCode: 200)
 
-        case ("POST", "/_whistflow/api/rules/toggle"):
+        case ("POST", "/_simpleproxy/api/rules/toggle"):
             var targetId: String?
             var targetPattern: String?
             if let bodyData = bodyString.data(using: .utf8),
@@ -472,7 +472,7 @@ public final class ProxyServer: @unchecked Sendable {
                 sendJsonResponse(clientConn: clientConn, json: ["error": "Rule not found"], statusCode: 404)
             }
 
-        case ("POST", "/_whistflow/api/rules/delete"):
+        case ("POST", "/_simpleproxy/api/rules/delete"):
             var targetId: String?
             var targetPattern: String?
             if let bodyData = bodyString.data(using: .utf8),
@@ -499,7 +499,7 @@ public final class ProxyServer: @unchecked Sendable {
                 sendJsonResponse(clientConn: clientConn, json: ["error": "Rule not found"], statusCode: 404)
             }
 
-        case ("POST", "/_whistflow/api/rules/raw"):
+        case ("POST", "/_simpleproxy/api/rules/raw"):
             var contentToParse = bodyString
             if let bodyData = bodyString.data(using: .utf8),
                let json = try? JSONSerialization.jsonObject(with: bodyData) as? [String: Any],
@@ -511,13 +511,13 @@ public final class ProxyServer: @unchecked Sendable {
             delegate?.proxyServerDidUpdateRulesFromApi(newRules)
             sendJsonResponse(clientConn: clientConn, json: ["message": "Rules updated successfully", "count": newRules.count], statusCode: 200)
 
-        case ("POST", "/_whistflow/api/rules/clear"):
+        case ("POST", "/_simpleproxy/api/rules/clear"):
             let empty: [ProxyRule] = []
             ruleEngine.updateRules(empty)
             delegate?.proxyServerDidUpdateRulesFromApi(empty)
             sendJsonResponse(clientConn: clientConn, json: ["message": "All rules cleared"], statusCode: 200)
 
-        case ("POST", "/_whistflow/api/appearance"):
+        case ("POST", "/_simpleproxy/api/appearance"):
             var mode = "system"
             if let bodyData = bodyString.data(using: .utf8),
                let json = try? JSONSerialization.jsonObject(with: bodyData) as? [String: Any],
@@ -530,7 +530,7 @@ public final class ProxyServer: @unchecked Sendable {
             delegate?.proxyServerDidUpdateAppearance(mode)
             sendJsonResponse(clientConn: clientConn, json: ["message": "Appearance set to \(mode)", "mode": mode], statusCode: 200)
 
-        case ("POST", "/_whistflow/api/mode"):
+        case ("POST", "/_simpleproxy/api/mode"):
             var appMode = "visual"
             if let bodyData = bodyString.data(using: .utf8),
                let json = try? JSONSerialization.jsonObject(with: bodyData) as? [String: Any],

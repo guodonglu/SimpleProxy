@@ -4,7 +4,7 @@ description: Manage and control SimpleProxy, the ultra-lightweight native Swift 
 license: MIT
 compatibility: Requires macOS with SimpleProxy.app installed and running, and `simpleproxy` CLI (Python 3.9+) in PATH.
 metadata:
-  repo: "https://github.com/guodonglu/WhistFlow"
+  repo: "https://github.com/guodonglu/SimpleProxy"
 ---
 
 # SimpleProxy Skill：极简 Swift 原生 macOS 代理控制

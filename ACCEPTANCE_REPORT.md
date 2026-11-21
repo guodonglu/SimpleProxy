@@ -1,4 +1,4 @@
-# WhistFlow - 项目验收与测试报告 (Acceptance & Test Report)
+# SimpleProxy - 项目验收与测试报告 (Acceptance & Test Report)
 
 > **测试环境**: macOS 26.7.1 (Apple Silicon / arm64)  
 > **Swift 编译器**: Swift 6.3.3  
@@ -27,7 +27,7 @@
 通过自动化测试脚本实测数据如下：
 
 ```text
-======================= WhistFlow Performance =======================
+======================= SimpleProxy Performance =======================
   • Binary Executable Size : 1.1 MB (1,139,816 bytes)
   • Cold Startup Latency   : 0.0029 秒 (2.9 ms)
   • Baseline Memory (RSS)  : 9.41 MB
@@ -43,7 +43,7 @@
 * **测试说明**：展示默认规则卡片，具备独立的规则启用开关、类型徽章（HOST/MOCK/REMOTE/STATUS）、域名与重定向目标预览、编辑/复制/删除功能。
 * **截图证据**：`Documentation/screenshots/01_visual_mode_initial.png`
 
-![Visual Mode Initial](file:///Users/luguodong/.gemini/antigravity/scratch/WhistFlow/Documentation/screenshots/01_visual_mode_initial.png)
+![Visual Mode Initial](file:///Users/luguodong/.gemini/antigravity/scratch/SimpleProxy/Documentation/screenshots/01_visual_mode_initial.png)
 
 ---
 
@@ -51,7 +51,7 @@
 * **测试说明**：通过 `⌘2` 切换至原生单色字体文本编辑器，兼容标准 Whistle 规则语法，并提供常用快捷模板注入按键与实时生效状态统计。
 * **截图证据**：`Documentation/screenshots/03_config_mode_text_editor.png`
 
-![Config Mode Text Editor](file:///Users/luguodong/.gemini/antigravity/scratch/WhistFlow/Documentation/screenshots/03_config_mode_text_editor.png)
+![Config Mode Text Editor](file:///Users/luguodong/.gemini/antigravity/scratch/SimpleProxy/Documentation/screenshots/03_config_mode_text_editor.png)
 
 ---
 
@@ -59,7 +59,7 @@
 * **测试说明**：按 `⌘N` 调起原生 macOS 流体毛玻璃弹窗，支持分类选择规则类型，表单校验与一键应用。
 * **截图证据**：`Documentation/screenshots/04_add_rule_sheet.png`
 
-![Add Rule Sheet](file:///Users/luguodong/.gemini/antigravity/scratch/WhistFlow/Documentation/screenshots/04_add_rule_sheet.png)
+![Add Rule Sheet](file:///Users/luguodong/.gemini/antigravity/scratch/SimpleProxy/Documentation/screenshots/04_add_rule_sheet.png)
 
 ---
 
@@ -69,8 +69,8 @@
   * 配置模式自动生成：`Documentation/screenshots/05_rule_added_config_mode.png`
   * 可视化模式自动解析：`Documentation/screenshots/06_rule_added_visual_mode.png`
 
-![Rule Added in Config](file:///Users/luguodong/.gemini/antigravity/scratch/WhistFlow/Documentation/screenshots/05_rule_added_config_mode.png)
-![Rule Added in Visual](file:///Users/luguodong/.gemini/antigravity/scratch/WhistFlow/Documentation/screenshots/06_rule_added_visual_mode.png)
+![Rule Added in Config](file:///Users/luguodong/.gemini/antigravity/scratch/SimpleProxy/Documentation/screenshots/05_rule_added_config_mode.png)
+![Rule Added in Visual](file:///Users/luguodong/.gemini/antigravity/scratch/SimpleProxy/Documentation/screenshots/06_rule_added_visual_mode.png)
 
 ---
 
@@ -80,8 +80,8 @@
   * 可视化模式关闭开关：`Documentation/screenshots/07_rule_toggled_off.png`
   * 代码模式自动注释对应行：`Documentation/screenshots/08_config_synced_after_toggle.png`
 
-![Rule Toggled Off](file:///Users/luguodong/.gemini/antigravity/scratch/WhistFlow/Documentation/screenshots/07_rule_toggled_off.png)
-![Config Synced After Toggle](file:///Users/luguodong/.gemini/antigravity/scratch/WhistFlow/Documentation/screenshots/08_config_synced_after_toggle.png)
+![Rule Toggled Off](file:///Users/luguodong/.gemini/antigravity/scratch/SimpleProxy/Documentation/screenshots/07_rule_toggled_off.png)
+![Config Synced After Toggle](file:///Users/luguodong/.gemini/antigravity/scratch/SimpleProxy/Documentation/screenshots/08_config_synced_after_toggle.png)
 
 ---
 
@@ -89,20 +89,20 @@
 * **测试说明**：点击「MOCK 模拟」胶囊按钮，列表瞬间过滤至仅展示符合类型的规则；点击「全部」即刻重置。
 * **截图证据**：`Documentation/screenshots/10_category_filter_mock.png`
 
-![Category Filter Mock](file:///Users/luguodong/.gemini/antigravity/scratch/WhistFlow/Documentation/screenshots/10_category_filter_mock.png)
+![Category Filter Mock](file:///Users/luguodong/.gemini/antigravity/scratch/SimpleProxy/Documentation/screenshots/10_category_filter_mock.png)
 
 ---
 
 ### 7. 隔离代理验证（绝不影响本地 Clash）
 * **测试说明**：
-  * 使用显式 `-x http://127.0.0.1:9898` 发起单次请求，验证 WhistFlow 本地 Mock 规则。
+  * 使用显式 `-x http://127.0.0.1:9898` 发起单次请求，验证 SimpleProxy 本地 Mock 规则。
   * 同时发起公网网络连通性测试，确认系统的外部网络与 Clash 代理链路丝毫未受干扰。
 * **终端实测执行记录**：
   ```bash
-  # 1. 验证 WhistFlow 独立端口 Mock 命中
+  # 1. 验证 SimpleProxy 独立端口 Mock 命中
   $ curl -s -x http://127.0.0.1:9898 -i http://mock.example.com/api/user
   HTTP/1.1 200 OK
-  Server: WhistFlow
+  Server: SimpleProxy
   Content-Type: application/json; charset=utf-8
   Content-Length: 61
   Access-Control-Allow-Origin: *
@@ -117,7 +117,7 @@
   Content-Length: 0
   ```
 * **状态联动结果**：
-  * WhistFlow 顶栏命中计数自动递增为 **1 命中**（见 `Documentation/screenshots/02_proxy_hit_verified.png`）。
+  * SimpleProxy 顶栏命中计数自动递增为 **1 命中**（见 `Documentation/screenshots/02_proxy_hit_verified.png`）。
 
 ---
 
@@ -134,28 +134,28 @@
   2. 浅色模式底色注入纯净白霜流体渐变，卡片采用高亮半透明纯白光泽材质搭配细致描边，彻底解决旧版“灰蒙、暗沉”问题。
 
 ### 2. 本地管理 API (Local REST Control API) 实测
-* **测试内容**：通过 `127.0.0.1:9898/_whistflow/api/` 端点直接进行状态查询与规则热生效。
+* **测试内容**：通过 `127.0.0.1:9898/_simpleproxy/api/` 端点直接进行状态查询与规则热生效。
 * **实测记录**：
   ```bash
   # 状态查询
-  $ curl -s http://127.0.0.1:9898/_whistflow/api/status
+  $ curl -s http://127.0.0.1:9898/_simpleproxy/api/status
   {"status":"running","port":9898,"rules_count":4,"total_requests":0,"matched_requests":0,"version":"1.0.0"}
 
   # 动态增删改查
-  $ curl -s -X POST -H "Content-Type: application/json" -d '{"rule": "cli-test.local 127.0.0.1:8888"}' http://127.0.0.1:9898/_whistflow/api/rules/add
+  $ curl -s -X POST -H "Content-Type: application/json" -d '{"rule": "cli-test.local 127.0.0.1:8888"}' http://127.0.0.1:9898/_simpleproxy/api/rules/add
   {"id":"...","message":"Rule added successfully","pattern":"cli-test.local","target":"127.0.0.1:8888"}
   ```
 * **结论**：所有 API 请求均触发主线程 UI 与底层 RuleEngine 原子更新，无需刷新。
 
 ### 3. CLI 命令行工具实测
-* **程序路径**：`~/.local/bin/whistflow`
+* **程序路径**：`~/.local/bin/simpleproxy`
 * **实测记录**：
-  * `whistflow status`：清晰展示状态、端口、规则总数与请求统计。
-  * `whistflow list`：以色彩高亮的优雅终端表格列出全部规则。
-  * `whistflow add` / `toggle` / `rm` / `raw` / `theme`：全部通过测试。
+  * `simpleproxy status`：清晰展示状态、端口、规则总数与请求统计。
+  * `simpleproxy list`：以色彩高亮的优雅终端表格列出全部规则。
+  * `simpleproxy add` / `toggle` / `rm` / `raw` / `theme`：全部通过测试。
 
 ### 4. 配套 Agent Skill 验证
-* **Skill 路径**：`~/.agents/skill/whistflow/SKILL.md`
+* **Skill 路径**：`~/.agents/skill/simpleproxy/SKILL.md`
 * **功能**：包含完整的 YAML Frontmatter、CLI 与 REST API 驱动手册、Whistle 语法速查表、安全隔离指导，支持各类 Coding Agent 直接操作。
 
 ### 5. SimpleProxy 极简原生应用图标与窗口完全去繁化
@@ -192,7 +192,7 @@
 ---
 
 ## 五、 验收总结
-经过完整的功能验证、CUA 界面截图比对、性能基准压测与隔离网络实测，**SimpleProxy**（原 WhistFlow）严格达成了所有需求指标：
+经过完整的功能验证、CUA 界面截图比对、性能基准压测与隔离网络实测，**SimpleProxy**（原 SimpleProxy）严格达成了所有需求指标：
 1. 原生 Swift 纯净无依赖，安装包仅 3.1 MB（含完整 Retina 图标包，二进制仅 1.2 MB），内存 ~9.4 MB，启动 2.9 ms；
 2. 完整 iOS 27 / macOS 26/27 视觉设计规范（支持深色/浅色模式、Liquid Glass 玻璃材质与专属极简光感图标）与双模式无缝切换；
 3. 规则实时热更新、支持导入导出；

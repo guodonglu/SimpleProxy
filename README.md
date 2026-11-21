@@ -92,8 +92,8 @@ open SimpleProxy.app
 
 ### 方式 2：从源码编译
 ```bash
-git clone https://github.com/guodonglu/WhistFlow.git
-cd WhistFlow
+git clone https://github.com/guodonglu/SimpleProxy.git
+cd SimpleProxy
 swift build -c release
 ./.build/release/SimpleProxy
 ```

@@ -2,7 +2,7 @@ import SwiftUI
 import AppKit
 
 // MARK: - Design System Tokens for macOS 26/27 (Liquid Glass & HIG)
-public struct WhistTheme {
+public struct ProxyTheme {
     // Single Accent Color (沉静高亮天青靛蓝 #1E70F0)
     public static let accent = Color(red: 0.12, green: 0.46, blue: 0.96)
     public static let accentSubtle = Color(red: 0.12, green: 0.46, blue: 0.96).opacity(0.12)
@@ -64,7 +64,7 @@ public struct VisualEffectBackground: NSViewRepresentable {
 // MARK: - Glass Card Modifier (Luminous Apple Liquid Glass)
 public struct GlassCardModifier: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
-    public var cornerRadius: CGFloat = WhistTheme.cardRadius
+    public var cornerRadius: CGFloat = ProxyTheme.cardRadius
     public var isHighlighted: Bool = false
 
     private var isLight: Bool {
@@ -73,7 +73,7 @@ public struct GlassCardModifier: ViewModifier {
 
     private var cardFillColor: Color {
         if isHighlighted {
-            return isLight ? WhistTheme.accent.opacity(0.08) : WhistTheme.accent.opacity(0.20)
+            return isLight ? ProxyTheme.accent.opacity(0.08) : ProxyTheme.accent.opacity(0.20)
         } else {
             return isLight ? Color.white.opacity(0.88) : Color(nsColor: .controlBackgroundColor).opacity(0.55)
         }
@@ -85,7 +85,7 @@ public struct GlassCardModifier: ViewModifier {
 
     private var cardStrokeColor: Color {
         if isHighlighted {
-            return WhistTheme.accent.opacity(0.45)
+            return ProxyTheme.accent.opacity(0.45)
         } else {
             return isLight ? Color.black.opacity(0.06) : Color.white.opacity(0.10)
         }
@@ -119,7 +119,7 @@ public struct GlassCardModifier: ViewModifier {
 }
 
 public extension View {
-    func glassCard(cornerRadius: CGFloat = WhistTheme.cardRadius, isHighlighted: Bool = false) -> some View {
+    func glassCard(cornerRadius: CGFloat = ProxyTheme.cardRadius, isHighlighted: Bool = false) -> some View {
         self.modifier(GlassCardModifier(cornerRadius: cornerRadius, isHighlighted: isHighlighted))
     }
 }

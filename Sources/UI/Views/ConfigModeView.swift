@@ -11,7 +11,7 @@ public struct ConfigModeView: View {
             HStack(spacing: 12) {
                 Text("Whistle 快捷模版:")
                     .font(.system(size: 11, weight: .medium))
-                    .foregroundColor(WhistTheme.labelSecondary)
+                    .foregroundColor(ProxyTheme.labelSecondary)
 
                 // Quick Insert: Host
                 Button("+ Host 映射") {
@@ -46,11 +46,11 @@ public struct ConfigModeView: View {
                 // Status indication
                 HStack(spacing: 4) {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(WhistTheme.activeGreen)
+                        .foregroundColor(ProxyTheme.activeGreen)
                         .font(.system(size: 11))
                     Text("实时生效 (\(viewModel.rules.filter { $0.isEnabled }.count) 条启用)")
                         .font(.system(size: 11, design: .monospaced))
-                        .foregroundColor(WhistTheme.labelSecondary)
+                        .foregroundColor(ProxyTheme.labelSecondary)
                 }
             }
             .padding(.horizontal, 16)
