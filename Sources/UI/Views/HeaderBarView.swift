@@ -99,6 +99,18 @@ public struct HeaderBarView: View {
                 .help("导出规则文件 (⌘S)")
                 .keyboardShortcut("s", modifiers: .command)
 
+                // Appearance Toggle (Auto / Light / Dark)
+                Button {
+                    viewModel.cycleAppearance()
+                } label: {
+                    Image(systemName: viewModel.appearanceMode.icon)
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(WhistTheme.labelSecondary)
+                }
+                .buttonStyle(.plain)
+                .help("切换外观模式: 当前为 \(viewModel.appearanceMode.rawValue)")
+                .padding(.horizontal, 4)
+
                 // Power Toggle
                 Button {
                     viewModel.toggleProxy()

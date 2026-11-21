@@ -46,5 +46,6 @@ public struct MainView: View {
                 dismissButton: .default(Text("好的"))
             )
         }
+        .preferredColorScheme(viewModel.appearanceMode.colorScheme)
     }
 }

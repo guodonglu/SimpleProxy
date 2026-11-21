@@ -121,9 +121,46 @@
 
 ---
 
-## 四、 验收总结
+## 四、 浅色模式 (Light Mode) 与 CLI / API 扩展验收
+
+### 1. 浅色模式适配验证
+* **测试内容**：切换浅色模式，验证 Liquid Glass 毛玻璃、卡片阴影、语义色彩及文本对比度。
+* **截图证据**：
+  * 可视化模式浅色外观：`Documentation/screenshots/14_appearance_light.png`
+  * 纯文本配置模式浅色外观：`Documentation/screenshots/15_appearance_light_config.png`
+* **结论**：浅色模式下界面元素自然通透，SF 字体与各类状态徽章清晰可辨，完美符合 macOS 26/27 浅色主题规范。
+
+### 2. 本地管理 API (Local REST Control API) 实测
+* **测试内容**：通过 `127.0.0.1:9898/_whistflow/api/` 端点直接进行状态查询与规则热生效。
+* **实测记录**：
+  ```bash
+  # 状态查询
+  $ curl -s http://127.0.0.1:9898/_whistflow/api/status
+  {"status":"running","port":9898,"rules_count":4,"total_requests":0,"matched_requests":0,"version":"1.0.0"}
+
+  # 动态增删改查
+  $ curl -s -X POST -H "Content-Type: application/json" -d '{"rule": "cli-test.local 127.0.0.1:8888"}' http://127.0.0.1:9898/_whistflow/api/rules/add
+  {"id":"...","message":"Rule added successfully","pattern":"cli-test.local","target":"127.0.0.1:8888"}
+  ```
+* **结论**：所有 API 请求均触发主线程 UI 与底层 RuleEngine 原子更新，无需刷新。
+
+### 3. CLI 命令行工具实测
+* **程序路径**：`~/.local/bin/whistflow`
+* **实测记录**：
+  * `whistflow status`：清晰展示状态、端口、规则总数与请求统计。
+  * `whistflow list`：以色彩高亮的优雅终端表格列出全部规则。
+  * `whistflow add` / `toggle` / `rm` / `raw` / `theme`：全部通过测试。
+
+### 4. 配套 Agent Skill 验证
+* **Skill 路径**：`~/.agents/skill/whistflow/SKILL.md`
+* **功能**：包含完整的 YAML Frontmatter、CLI 与 REST API 驱动手册、Whistle 语法速查表、安全隔离指导，支持各类 Coding Agent 直接操作。
+
+---
+
+## 五、 验收总结
 经过完整的功能验证、CUA 界面截图比对、性能基准压测与隔离网络实测，**WhistFlow** 严格达成了所有需求指标：
-1. 原生 Swift 纯净无依赖，内存 < 35MB，启动 2.9ms；
-2. 完整 macOS 26/27 视觉设计规范与双模式无缝切换；
+1. 原生 Swift 纯净无依赖，安装包仅 1.2 MB，内存 ~9.4 MB，启动 2.9 ms；
+2. 完整 macOS 26/27 视觉设计规范（支持深色/浅色模式）与双模式无缝切换；
 3. 规则实时热更新、支持导入导出；
-4. 对主机现有 Clash 环境 100% 零干扰安全隔离。
+4. 提供开箱即用的 `whistflow` CLI、开放 REST API 以及专属配套 Skill；
+5. 对主机现有 Clash 环境 100% 零干扰安全隔离。

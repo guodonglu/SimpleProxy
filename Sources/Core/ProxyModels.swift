@@ -2,7 +2,7 @@ import Foundation
 import SwiftUI
 
 // MARK: - Rule Action Definition
-public enum RuleAction: Equatable, Codable {
+public enum RuleAction: Equatable, Codable, Sendable {
     case hostRedirect(host: String, port: Int)
     case mapRemote(targetUrl: String)
     case mapLocal(body: String, contentType: String, statusCode: Int)
@@ -53,7 +53,7 @@ public enum RuleAction: Equatable, Codable {
 }
 
 // MARK: - Proxy Rule Model
-public struct ProxyRule: Identifiable, Equatable, Codable {
+public struct ProxyRule: Identifiable, Equatable, Codable, Sendable {
     public var id: UUID
     public var isEnabled: Bool
     public var pattern: String

@@ -16,6 +16,30 @@ public enum AppMode: String, CaseIterable, Identifiable {
     }
 }
 
+public enum AppearanceMode: String, CaseIterable, Identifiable {
+    case system = "跟随系统"
+    case light = "浅色模式"
+    case dark = "深色模式"
+
+    public var id: String { rawValue }
+
+    public var icon: String {
+        switch self {
+        case .system: return "circle.lefthalf.filled"
+        case .light: return "sun.max.fill"
+        case .dark: return "moon.fill"
+        }
+    }
+
+    public var colorScheme: ColorScheme? {
+        switch self {
+        case .system: return nil
+        case .light: return .light
+        case .dark: return .dark
+        }
+    }
+}
+
 @MainActor
 public final class ProxyViewModel: ObservableObject, ProxyServerDelegate {
     // Core Engine & Server
@@ -26,6 +50,7 @@ public final class ProxyViewModel: ObservableObject, ProxyServerDelegate {
     @Published public var rules: [ProxyRule] = []
     @Published public var rawConfigText: String = ""
     @Published public var currentMode: AppMode = .visual
+    @Published public var appearanceMode: AppearanceMode = .system
     @Published public var filterType: RuleFilterType = .all
     @Published public var searchText: String = ""
 
@@ -119,6 +144,46 @@ public final class ProxyViewModel: ObservableObject, ProxyServerDelegate {
         Task { @MainActor in
             self.totalRequests = total
             self.matchedRequests = matched
+        }
+    }
+
+    nonisolated public func proxyServerDidUpdateRulesFromApi(_ rules: [ProxyRule]) {
+        Task { @MainActor in
+            self.isInternalSyncing = true
+            self.rules = rules
+            self.rawConfigText = RuleEngine.serializeToWhistle(rules: rules)
+            self.isInternalSyncing = false
+        }
+    }
+
+    nonisolated public func proxyServerDidUpdateAppearance(_ mode: String) {
+        Task { @MainActor in
+            if mode == "light" {
+                self.appearanceMode = .light
+            } else if mode == "dark" {
+                self.appearanceMode = .dark
+            } else {
+                self.appearanceMode = .system
+            }
+        }
+    }
+
+    nonisolated public func proxyServerDidUpdateAppMode(_ mode: String) {
+        Task { @MainActor in
+            if mode == "config" {
+                self.currentMode = .config
+            } else {
+                self.currentMode = .visual
+            }
+        }
+    }
+
+    // MARK: - Appearance Mode Control
+    public func cycleAppearance() {
+        switch appearanceMode {
+        case .system: appearanceMode = .light
+        case .light: appearanceMode = .dark
+        case .dark: appearanceMode = .system
         }
     }
 

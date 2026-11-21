@@ -49,12 +49,21 @@ This document is maintained continuously across turns to preserve context, archi
   - [x] Test category filtering (10_category_filter_mock.png, 11_filter_reset_all.png).
   - [x] Test isolated proxy response via curl on port 9898 (Mock response verified, Clash 100% unaffected).
   - [x] Benchmark memory consumption (9.4 MB) and cold launch time (2.9 ms).
-- [ ] **Milestone 5: Documentation & GitHub Release**
+- [x] **Milestone 5: Documentation & GitHub Release**
   - [x] Complete `README.md` with features, screenshots, and architecture.
   - [x] Produce `ACCEPTANCE_REPORT.md` with complete test evidence.
-  - [ ] Initialize Git repository, commit clean code.
-  - [ ] Create GitHub repository via `gh` and push.
+  - [x] Initialize Git repository, commit clean code.
+  - [x] Create GitHub repository via `gh` and push to `https://github.com/guodonglu/WhistFlow`.
+- [x] **Milestone 6: Light Mode, CLI Tool, Management API & Companion Skill**
+  - [x] Light Mode (浅色模式) implementation with explicit switcher & system auto adaptation.
+  - [x] Light Mode UI verification with screenshots (14_appearance_light.png, 15_appearance_light_config.png).
+  - [x] Built-in Local REST Control API on `127.0.0.1:9898/_whistflow/api/` for dynamic control.
+  - [x] `whistflow` CLI executable script installed to `~/.local/bin/whistflow`.
+  - [x] Official companion skill authored at `~/.agents/skill/whistflow/SKILL.md`.
 
 ## 4. Current State
-- Milestone 1 to 4 fully completed and verified.
-- Milestone 5: Publishing to GitHub repository in progress.
+- All milestones fully delivered and verified.
+- Production app: `WhistFlow.app` (1.2 MB, ~9.4 MB RAM).
+- CLI tool: `whistflow` in `~/.local/bin/whistflow`.
+- Agent Skill: `~/.agents/skill/whistflow/SKILL.md`.
+- GitHub repository: `https://github.com/guodonglu/WhistFlow`.

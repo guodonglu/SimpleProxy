@@ -16,14 +16,19 @@
 ### 1. 可视化模式 (Visual Mode)
 以优雅的 macOS 原生 Liquid Glass 流体卡片直观呈现代理规则，具备实时开关、类型徽章、分类过滤与快捷操作：
 
-![Visual Mode](Documentation/screenshots/01_visual_mode_initial.png)
+![Visual Mode (Dark)](Documentation/screenshots/01_visual_mode_initial.png)
 
-### 2. 文本配置模式 (Configuration Mode)
+### 2. 浅色模式原生适配 (Light Mode)
+支持跟随系统自动切换或手动一键切换，完美适配浅色 Liquid Glass 毛玻璃质感与 SF 字体：
+
+![Visual Mode (Light)](Documentation/screenshots/14_appearance_light.png)
+
+### 3. 文本配置模式 (Configuration Mode)
 兼容标准 Whistle 规则语法的纯文本编辑器，支持单色字体、快捷语法模板插入与实时生效状态校验：
 
-![Config Mode](Documentation/screenshots/03_config_mode_text_editor.png)
+![Config Mode (Light)](Documentation/screenshots/15_appearance_light_config.png)
 
-### 3. 原生规则编辑弹窗
+### 4. 原生规则编辑弹窗
 点击「新增规则」或按快捷键 `⌘N` 唤出原生 macOS 毛玻璃表单弹窗：
 
 ![Add Rule Sheet](Documentation/screenshots/04_add_rule_sheet.png)
@@ -92,6 +97,61 @@ WhistFlow 原生兼容经典 Whistle 规则语法：
 | **`⌘O`** | 导入 Whistle 规则文件 |
 | **`⌘S`** | 导出当前规则文件 |
 | **`⌘Q`** | 退出 WhistFlow |
+
+---
+
+## 💻 命令行工具 (CLI) 与配套 Skill
+
+WhistFlow 附带全功能轻量级命令行工具 `whistflow`（安装在 `~/.local/bin/whistflow` 或直接运行 `bin/whistflow`），并提供面向 AI Agent 的配套 Skill。
+
+### 常用 CLI 命令
+```bash
+# 查看代理健康状态与请求统计
+whistflow status
+
+# 列出所有代理规则 (优雅终端表格)
+whistflow list
+
+# 快速添加规则
+whistflow add api.dev.com 127.0.0.1:3000
+whistflow add mock.com/user "resBody://({'code':0,'msg':'ok'})"
+
+# 切换某条规则开关 (实时生效)
+whistflow toggle api.dev.com
+
+# 删除规则
+whistflow rm api.dev.com
+
+# 切换外观模式 (浅色 / 深色 / 跟随系统)
+whistflow theme light
+whistflow theme dark
+whistflow theme system
+
+# 切换 UI 显示模式 (可视化 / 文本配置)
+whistflow mode visual
+whistflow mode config
+
+# 查看或以管道方式导入原始 Whistle 规则
+whistflow raw
+cat my_rules.txt | whistflow raw
+```
+
+### 配套 Agent Skill
+项目包含官方配套 Skill 文件，位于 `~/.agents/skill/whistflow/SKILL.md`，支持各类 Coding Agent（Antigravity、Cursor、Claude Code 等）通过自然语言直接自动化调度与操控 WhistFlow 代理服务。
+
+---
+
+## 🔌 开放管理 API (Local REST Control API)
+
+WhistFlow 原生在 `127.0.0.1:9898/_whistflow/api/` 暴露管理端点，无需复杂配置，直接通过 HTTP 操控：
+- `GET /_whistflow/api/status` - 获取服务运行状态
+- `GET /_whistflow/api/rules` - 获取所有规则及原始配置
+- `POST /_whistflow/api/rules/add` - 动态新增规则
+- `POST /_whistflow/api/rules/toggle` - 动态开关指定规则
+- `POST /_whistflow/api/rules/delete` - 删除指定规则
+- `POST /_whistflow/api/rules/raw` - 批量全量替换规则
+- `POST /_whistflow/api/appearance` - 切换界面浅色/深色主题
+- `POST /_whistflow/api/mode` - 切换可视化/代码模式
 
 ---
 

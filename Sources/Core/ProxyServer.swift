@@ -4,6 +4,9 @@ import Network
 // MARK: - Proxy Server Delegate / Notification
 public protocol ProxyServerDelegate: AnyObject {
     func proxyServerDidUpdateStats(total: Int, matched: Int)
+    func proxyServerDidUpdateRulesFromApi(_ rules: [ProxyRule])
+    func proxyServerDidUpdateAppearance(_ mode: String)
+    func proxyServerDidUpdateAppMode(_ mode: String)
 }
 
 // MARK: - Proxy Server
@@ -229,6 +232,12 @@ public final class ProxyServer: @unchecked Sendable {
             }
         }
 
+        // Intercept Local Management Control API
+        if path.hasPrefix("/_whistflow/") || host == "local.whistflow.com" || host == "whistflow.local" {
+            self.handleManagementApi(clientConn: clientConn, method: method, uri: path, rawData: rawData, lines: lines)
+            return
+        }
+
         // Match Rule Engine
         let matchResult = ruleEngine.match(host: host, path: path)
         self.incrementStats(matched: matchResult != nil)
@@ -345,5 +354,219 @@ public final class ProxyServer: @unchecked Sendable {
                 connB.cancel()
             }
         }
+    }
+
+    // MARK: - Management API Helper (CLI & MCP Control)
+    private func handleManagementApi(clientConn: NWConnection, method: String, uri: String, rawData: Data, lines: [String]) {
+        if method.uppercased() == "OPTIONS" {
+            sendJsonResponse(clientConn: clientConn, json: ["status": "ok"], statusCode: 200)
+            return
+        }
+
+        // Find body if any
+        var bodyString = ""
+        if let headerEndRange = rawData.range(of: Data([13, 10, 13, 10])) { // \r\n\r\n
+            let bodyData = rawData.subdata(in: headerEndRange.upperBound..<rawData.count)
+            bodyString = String(decoding: bodyData, as: UTF8.self)
+        } else if let headerEndRange = rawData.range(of: Data([10, 10])) { // \n\n
+            let bodyData = rawData.subdata(in: headerEndRange.upperBound..<rawData.count)
+            bodyString = String(decoding: bodyData, as: UTF8.self)
+        }
+
+        // Clean path without query parameters
+        let path = uri.components(separatedBy: "?").first ?? uri
+
+        switch (method.uppercased(), path) {
+        case ("GET", "/_whistflow/api/status"):
+            let rules = ruleEngine.getRules()
+            let response: [String: Any] = [
+                "status": isRunning ? "running" : "stopped",
+                "port": port,
+                "rules_count": rules.count,
+                "total_requests": totalRequests,
+                "matched_requests": matchedRequests,
+                "version": "1.0.0"
+            ]
+            sendJsonResponse(clientConn: clientConn, json: response, statusCode: 200)
+
+        case ("GET", "/_whistflow/api/rules"):
+            let rules = ruleEngine.getRules()
+            let rulesList: [[String: Any]] = rules.map { rule in
+                return [
+                    "id": rule.id.uuidString,
+                    "pattern": rule.pattern,
+                    "target": rule.action.displayTarget,
+                    "type": rule.action.typeName,
+                    "enabled": rule.isEnabled,
+                    "comment": rule.comment ?? "",
+                    "raw": rule.toWhistleLine()
+                ]
+            }
+            let rawText = RuleEngine.serializeToWhistle(rules: rules)
+            let response: [String: Any] = [
+                "count": rulesList.count,
+                "rules": rulesList,
+                "raw": rawText
+            ]
+            sendJsonResponse(clientConn: clientConn, json: response, statusCode: 200)
+
+        case ("POST", "/_whistflow/api/rules/add"):
+            var lineToParse = ""
+            if let bodyData = bodyString.data(using: .utf8),
+               let json = try? JSONSerialization.jsonObject(with: bodyData) as? [String: Any] {
+                if let ruleLine = json["rule"] as? String {
+                    lineToParse = ruleLine
+                } else if let pattern = json["pattern"] as? String, let target = json["target"] as? String {
+                    lineToParse = "\(pattern) \(target)"
+                }
+            } else {
+                lineToParse = bodyString.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+
+            let parsed = RuleEngine.parseWhistleRules(text: lineToParse)
+            guard let newRule = parsed.first else {
+                sendJsonResponse(clientConn: clientConn, json: ["error": "Invalid rule format. Expected Whistle rule syntax."], statusCode: 400)
+                return
+            }
+
+            var currentRules = ruleEngine.getRules()
+            currentRules.append(newRule)
+            ruleEngine.updateRules(currentRules)
+            delegate?.proxyServerDidUpdateRulesFromApi(currentRules)
+            sendJsonResponse(clientConn: clientConn, json: [
+                "message": "Rule added successfully",
+                "id": newRule.id.uuidString,
+                "pattern": newRule.pattern,
+                "target": newRule.action.displayTarget,
+                "raw": newRule.toWhistleLine()
+            ], statusCode: 200)
+
+        case ("POST", "/_whistflow/api/rules/toggle"):
+            var targetId: String?
+            var targetPattern: String?
+            if let bodyData = bodyString.data(using: .utf8),
+               let json = try? JSONSerialization.jsonObject(with: bodyData) as? [String: Any] {
+                targetId = json["id"] as? String
+                targetPattern = json["pattern"] as? String
+            } else {
+                targetPattern = bodyString.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+
+            var currentRules = ruleEngine.getRules()
+            var toggled = false
+            for i in 0..<currentRules.count {
+                if (targetId != nil && currentRules[i].id.uuidString == targetId) ||
+                   (targetPattern != nil && !targetPattern!.isEmpty && currentRules[i].pattern == targetPattern) {
+                    currentRules[i].isEnabled.toggle()
+                    toggled = true
+                    break
+                }
+            }
+
+            if toggled {
+                ruleEngine.updateRules(currentRules)
+                delegate?.proxyServerDidUpdateRulesFromApi(currentRules)
+                sendJsonResponse(clientConn: clientConn, json: ["message": "Rule toggled successfully"], statusCode: 200)
+            } else {
+                sendJsonResponse(clientConn: clientConn, json: ["error": "Rule not found"], statusCode: 404)
+            }
+
+        case ("POST", "/_whistflow/api/rules/delete"):
+            var targetId: String?
+            var targetPattern: String?
+            if let bodyData = bodyString.data(using: .utf8),
+               let json = try? JSONSerialization.jsonObject(with: bodyData) as? [String: Any] {
+                targetId = json["id"] as? String
+                targetPattern = json["pattern"] as? String
+            } else {
+                targetPattern = bodyString.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+
+            var currentRules = ruleEngine.getRules()
+            let beforeCount = currentRules.count
+            currentRules.removeAll { rule in
+                if let id = targetId, rule.id.uuidString == id { return true }
+                if let pat = targetPattern, !pat.isEmpty, rule.pattern == pat { return true }
+                return false
+            }
+
+            if currentRules.count < beforeCount {
+                ruleEngine.updateRules(currentRules)
+                delegate?.proxyServerDidUpdateRulesFromApi(currentRules)
+                sendJsonResponse(clientConn: clientConn, json: ["message": "Rule deleted successfully"], statusCode: 200)
+            } else {
+                sendJsonResponse(clientConn: clientConn, json: ["error": "Rule not found"], statusCode: 404)
+            }
+
+        case ("POST", "/_whistflow/api/rules/raw"):
+            var contentToParse = bodyString
+            if let bodyData = bodyString.data(using: .utf8),
+               let json = try? JSONSerialization.jsonObject(with: bodyData) as? [String: Any],
+               let content = json["content"] as? String {
+                contentToParse = content
+            }
+            let newRules = RuleEngine.parseWhistleRules(text: contentToParse)
+            ruleEngine.updateRules(newRules)
+            delegate?.proxyServerDidUpdateRulesFromApi(newRules)
+            sendJsonResponse(clientConn: clientConn, json: ["message": "Rules updated successfully", "count": newRules.count], statusCode: 200)
+
+        case ("POST", "/_whistflow/api/rules/clear"):
+            let empty: [ProxyRule] = []
+            ruleEngine.updateRules(empty)
+            delegate?.proxyServerDidUpdateRulesFromApi(empty)
+            sendJsonResponse(clientConn: clientConn, json: ["message": "All rules cleared"], statusCode: 200)
+
+        case ("POST", "/_whistflow/api/appearance"):
+            var mode = "system"
+            if let bodyData = bodyString.data(using: .utf8),
+               let json = try? JSONSerialization.jsonObject(with: bodyData) as? [String: Any],
+               let m = json["mode"] as? String {
+                mode = m.lowercased()
+            } else {
+                let m = bodyString.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+                if !m.isEmpty { mode = m }
+            }
+            delegate?.proxyServerDidUpdateAppearance(mode)
+            sendJsonResponse(clientConn: clientConn, json: ["message": "Appearance set to \(mode)", "mode": mode], statusCode: 200)
+
+        case ("POST", "/_whistflow/api/mode"):
+            var appMode = "visual"
+            if let bodyData = bodyString.data(using: .utf8),
+               let json = try? JSONSerialization.jsonObject(with: bodyData) as? [String: Any],
+               let m = json["mode"] as? String {
+                appMode = m.lowercased()
+            } else {
+                let m = bodyString.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+                if !m.isEmpty { appMode = m }
+            }
+            delegate?.proxyServerDidUpdateAppMode(appMode)
+            sendJsonResponse(clientConn: clientConn, json: ["message": "App mode set to \(appMode)", "mode": appMode], statusCode: 200)
+
+        default:
+            sendJsonResponse(clientConn: clientConn, json: ["error": "Unknown API endpoint or method: \(method) \(path)"], statusCode: 404)
+        }
+    }
+
+    private func sendJsonResponse(clientConn: NWConnection, json: [String: Any], statusCode: Int) {
+        let bodyData = (try? JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted, .sortedKeys])) ?? Data("{}".utf8)
+        let statusText = (statusCode == 200) ? "OK" : ((statusCode == 404) ? "Not Found" : "Error")
+        let headers = [
+            "HTTP/1.1 \(statusCode) \(statusText)",
+            "Server: WhistFlow",
+            "Content-Type: application/json; charset=utf-8",
+            "Content-Length: \(bodyData.count)",
+            "Access-Control-Allow-Origin: *",
+            "Access-Control-Allow-Methods: GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers: Content-Type",
+            "Connection: close",
+            "\r\n"
+        ].joined(separator: "\r\n")
+
+        var fullData = headers.data(using: .utf8) ?? Data()
+        fullData.append(bodyData)
+
+        clientConn.send(content: fullData, completion: .contentProcessed({ _ in
+            clientConn.cancel()
+        }))
     }
 }
