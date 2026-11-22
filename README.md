@@ -42,6 +42,11 @@
 
 ![Add Rule Sheet](Documentation/screenshots/04_add_rule_sheet.png)
 
+### 5. DMG 安装包原生体验 (DMG Drag & Drop Installer)
+精心定制的 Liquid Glass 风格 DMG 拖拽安装器（安装包仅 **2.4 MB**）：
+
+![SimpleProxy DMG Installer](Documentation/screenshots/35_dmg_installer.png)
+
 ---
 
 ## ✨ 核心特性
@@ -84,13 +89,22 @@
 
 ## 🚀 快速开始
 
-### 方式 1：直接运行预编译 App
+### 方式 1：DMG 安装包 (推荐)
+直接下载并双击挂载 `SimpleProxy.dmg`，将 `SimpleProxy` 拖拽至 `Applications` 目录即可完成安装：
+- 桌面已就绪：`~/Desktop/SimpleProxy.dmg`
+- [下载最新 Release DMG](https://github.com/guodonglu/SimpleProxy/releases)
+- 本地一键打包命令：
+  ```bash
+  ./scripts/package_dmg.sh
+  ```
+
+### 方式 2：直接运行预编译 App
 克隆代码库后直接打开 `SimpleProxy.app`：
 ```bash
 open SimpleProxy.app
 ```
 
-### 方式 2：从源码编译
+### 方式 3：从源码编译
 ```bash
 git clone https://github.com/guodonglu/SimpleProxy.git
 cd SimpleProxy

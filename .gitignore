@@ -4,3 +4,7 @@
 *~
 DerivedData/
 .swiftpm/
+dist/
+*.dmg
+/tmp/
+

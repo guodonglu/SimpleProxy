@@ -83,10 +83,22 @@ This document is maintained continuously across turns to preserve context, archi
   - [x] Added `⌘D` for instant line duplication.
   - [x] Implemented rich syntax highlighting for Whistle comments (`#`), protocols (`resBody://`, `statusCode://`, `redirect://`), and URLs.
   - [x] Captured verified screenshots: `34_fixed_code_editor.png` (Light Mode) and `35_code_editor_dark_mode.png` (Dark Mode).
+- [x] **Milestone 10: Complete GitHub Repository Rename to SimpleProxy**
+  - [x] GitHub repository renamed via `gh` to `guodonglu/SimpleProxy`.
+  - [x] Remote URL updated to `https://github.com/guodonglu/SimpleProxy.git`.
+  - [x] Local directory renamed to `/Users/luguodong/.gemini/antigravity/scratch/SimpleProxy`.
+  - [x] Codebase thoroughly sanitized of legacy branding.
+- [x] **Milestone 11: Native macOS DMG Packaging & Distribution**
+  - [x] Custom Liquid Glass DMG background generator (`scripts/generate_dmg_background.swift`).
+  - [x] Automated DMG packaging script (`scripts/package_dmg.sh`).
+  - [x] AppleScript automated Finder window bounds, icon size, view settings, and item alignment.
+  - [x] High-efficiency UDZO compressed DMG generated (~2.4 MB) at `~/Desktop/SimpleProxy.dmg` and `dist/SimpleProxy-1.0.0.dmg`.
+  - [x] Verified with mounted screenshot (`Documentation/screenshots/35_dmg_installer.png`).
 
 ## 4. Current State
 - All milestones fully delivered and verified.
 - Production app: `SimpleProxy.app` (3.1 MB, native binary 1.2 MB + Retina AppIcon.icns).
+- Distribution DMG: `SimpleProxy.dmg` (2.4 MB) at `~/Desktop/SimpleProxy.dmg`.
 - CLI tool: `simpleproxy` in `~/.local/bin/simpleproxy`.
 - Agent Skills: `simpleproxy` and `ui-ux-pro-max` in `~/.agents/skill/`.
 - GitHub repository: `https://github.com/guodonglu/SimpleProxy`.
