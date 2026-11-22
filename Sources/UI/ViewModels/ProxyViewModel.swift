@@ -42,6 +42,8 @@ public enum AppearanceMode: String, CaseIterable, Identifiable {
 
 @MainActor
 public final class ProxyViewModel: ObservableObject, ProxyServerDelegate {
+    public static let shared = ProxyViewModel()
+
     // Core Engine & Server
     public let ruleEngine: RuleEngine
     public let proxyServer: ProxyServer
@@ -192,6 +194,13 @@ public final class ProxyViewModel: ObservableObject, ProxyServerDelegate {
     public func toggleRule(id: UUID) {
         guard let index = rules.firstIndex(where: { $0.id == id }) else { return }
         rules[index].isEnabled.toggle()
+        commitRulesChange()
+    }
+
+    public func toggleAllRules(enable: Bool) {
+        for index in rules.indices {
+            rules[index].isEnabled = enable
+        }
         commitRulesChange()
     }
 

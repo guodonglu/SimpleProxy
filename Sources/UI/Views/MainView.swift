@@ -1,7 +1,7 @@
 import SwiftUI
 
 public struct MainView: View {
-    @StateObject private var viewModel = ProxyViewModel()
+    @ObservedObject var viewModel: ProxyViewModel = ProxyViewModel.shared
     @Environment(\.colorScheme) var systemColorScheme
 
     private var isLight: Bool {
